@@ -1,5 +1,4 @@
-import pitch_scaler
+from pitch_scaler import PitchScaler
 
-test = pitch_scaler.PitchScaler('./python/pitch_shifter/Chord progression.wav', 440, 20)
-
-print(test.audio_spectrum(30, 0.1))
+test = PitchScaler('./python/pitch_shifter/Chord progression.wav')
+print(test.audio_spectrum(30, 35, 0.1))
