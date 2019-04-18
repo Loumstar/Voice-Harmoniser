@@ -1,4 +1,4 @@
 from pitch_scaler import PitchScaler
 
-test = PitchScaler('./Chord progression.wav')
-print(test.determine_pitch(20, 0.1))
+test = PitchScaler('./Testing many notes.wav')
+print(test.determine_pitch(4.15, 0.5))

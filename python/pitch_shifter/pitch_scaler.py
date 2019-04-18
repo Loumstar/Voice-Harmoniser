@@ -1,5 +1,5 @@
 import wave
-from numpy import fft as fourier, linspace, absolute, sin, pi, mean
+from numpy import fft as fourier, linspace, absolute, sin, pi, mean, e
 import matplotlib.pyplot as plot
 
 class PitchScaler:
@@ -48,7 +48,7 @@ class PitchScaler:
         spectrum, amplitude = self.audio_spectrum(start, clip_length)
         peaks = self.determine_peaks(spectrum, amplitude) #sorted by frequency ascending
         
-        spikes = self.determine_spikes(peaks, 10, 2.5)
+        spikes = self.determine_spikes(peaks, 10, 3)
 
         peaks_f = list(map(lambda x: x[0], peaks))
         peaks_a = list(map(lambda x: x[1], peaks))
@@ -57,20 +57,31 @@ class PitchScaler:
         spikes_a = list(map(lambda x: x[1], spikes))
         spikes_n = list(map(lambda x: x[2], spikes))
 
+        spikes_distr = self.normal_d_spikes(spectrum, spikes, 50)
+        note_probability = []
+        
+        for s in spikes:
+            harmonics = self.harmonics(s[0], 20)
+            p = self.compare_harmonics_to_spikes(spectrum, spikes_distr, harmonics, len(spikes))
+            print(s[0], p)
+            note_probability.append([s[0], p])
+
+        print(sum(list(map(lambda x: x[1], note_probability))))
         plot.plot(
             spectrum, amplitude, 'r',
             peaks_f, peaks_a, 'b*',
             spikes_f, spikes_n, 'b',
-            spikes_f, spikes_a, 'g^'
+            spikes_f, spikes_a, 'g^',
+            spectrum, spikes_distr, 'g'
         )
 
-        #plot.show()
+        plot.show()
         
         """
         use spearman rank coefficient to determine the likelihood that a peak is the fundamental frequency
         by comparing the rank of the frequencies to that expected of that fundamental frequency.
         """
-        return spikes
+        return note_probability
 
     def determine_peaks(self, spectrum, amplitude):
         """
@@ -126,10 +137,13 @@ class PitchScaler:
         noise close to that frequency.
         """
         spikes = []
-        lb = 0
-        ub = sample_size // 2
+
+        sample_size += 1 if sample_size % 2 == 0 else 0
+        lb, ub = 0, sample_size // 2
+        noise = sum([p[2] for p in peaks[lb:ub]]) / sample_size
+
         for i, (f, a, m) in enumerate(peaks):
-            noise = sum([p[2] for p in peaks[lb:ub]]) / (sample_size+1)
+            noise = self._moving_average(noise, peaks, lb, ub, sample_size)
             
             if a / noise > threshold:
                 spikes.append([f, a, noise])
@@ -140,3 +154,51 @@ class PitchScaler:
             lb = lb if lb > 0 else 0
 
         return spikes
+
+    def _moving_average(self, noise, peaks, lb, ub, sample_size):
+        """
+        Method to return the average noise quicker than summing elements in a list.
+        Because all values except the lowest value are part of the average, it is quicker
+        to simply remove the last value, add the new one and divided by the size of the 
+        dataset.
+        """
+        value_to_remove = peaks[lb - 1][2] if lb > 0 else 0
+        value_to_add = peaks[ub][2] if ub < len(peaks) else 0
+
+        new_noise = (sample_size * noise) - value_to_remove + value_to_add
+
+        return new_noise / sample_size
+
+    def compare_harmonics_to_spikes(self, spectrum, distribution, harmonics, spikes_num):
+
+        correlation = 0
+
+        for h in harmonics:
+            i = 0
+            v = spectrum[i]
+            difference = None
+            
+            while difference == None or abs(h - v) < difference:
+                difference = abs(h - v)
+                i += 1
+                if i !< len(spectrum) - 1:
+                    break
+                
+                v = spectrum[i]
+            
+            correlation += distribution[i]
+
+        return correlation / spikes_num
+
+    def normal_d_spikes(self, spectrum, spikes, spacing):
+        distribution = []
+        for x in spectrum:
+            p = 0
+            for f, a, n in spikes:
+                p += e ** -((2 * (x-f) / spacing) ** 2)
+            distribution.append(p)
+
+        return distribution
+
+    def harmonics(self, f, n):
+        return [f*(h+1) for h in range(n)]
