@@ -1,9 +1,18 @@
 import wave
 from numpy import fft as fourier, linspace, absolute, mean, e
+from functools import reduce
 
 #import matplotlib.pyplot as plot
 
 class PitchDetector:
+    """
+    Class to open an audio file and analyse its waveform to determine its
+    pitch across a small interval or 'clip'.
+
+    audio_filename:
+    A string of the path to the target audio file. Can be absolute or relative.
+    """
+    
     def __init__(self, audio_filename):
         #opens the standard file. Must be wav format.
         self.audio_file = wave.open(audio_filename)
@@ -34,6 +43,13 @@ class PitchDetector:
         self.spikes_arr_size = 20
 
     def frequency_spectrum(self, start):
+        """
+        Method to return the frequency spectrum and corresponding amplitudes.
+
+        start:
+        the number of seconds after the start of the track from where analysis 
+        begins.
+        """
         #total number of frames in each clip
         clip_frames = int(self.frame_rate * self.clip_length)
 
@@ -81,13 +97,12 @@ class PitchDetector:
         spectrum, amplitude = self.frequency_spectrum(start)
         peaks = self.determine_peaks(spectrum, amplitude)
         spikes = self.get_peaks_above_threshold(peaks)
-        distribution = self.spike_distribution(spectrum, spikes)
         
         note_probability = []
         
         for s in spikes:
             harmonics = self.harmonics(s[0])
-            p = self.test_harmonics(spectrum, distribution, harmonics, len(spikes))
+            p = self.test_harmonics(spectrum, spikes, harmonics)
             note_probability.append(tuple([s[0], p]))
 
         """
@@ -121,8 +136,8 @@ class PitchDetector:
         The largest value between two minima is found and added to the list as a tuple
         of its frequency, amplitude, and the average amplitude between the two minimas.
         """
+
         peaks = []
-        
         prev_gradient = 0
         prev_min_i = 0
         prev_a = 0
@@ -133,7 +148,6 @@ class PitchDetector:
             if prev_min_i != i and new_gradient > 0 and prev_gradient <= 0:
                 peak = self._find_peak(spectrum[prev_min_i:i], amplitude[prev_min_i:i])
                 peaks.append(peak)
-                
                 prev_min_i = i
 
             prev_gradient = new_gradient
@@ -152,7 +166,6 @@ class PitchDetector:
         """
         f, a_max, a_sum = None, 0, 0
         for i, a in enumerate(amplitudes):
-            
             if a_max < a or f == None:
                 a_max = a
                 f = spectrum[i]
@@ -184,7 +197,7 @@ class PitchDetector:
             #if the ratio of amplitude to background noise exceeds the threshold,
             #it is likely that the peak is also a spike, and a possible harmonic.
             if a / noise > self.threshold:
-                spikes.append([f, a, noise])
+                spikes.append(tuple([f, a, noise]))
             #bounds for the calculated mean move with each peak.
             if i > self.sample_size // 2:
                 lb, ub = lb + 1, ub + 1
@@ -207,37 +220,20 @@ class PitchDetector:
 
         return new_noise / self.sample_size
 
-    def test_harmonics(self, spectrum, distribution, harmonics, spikes_num):
+    def test_harmonics(self, spectrum, spikes, harmonics):
         #correlation is a value that determines how close to the actual peaks a certain 
         #frequency's harmonics are.
         correlation = 0
         for h in harmonics:
-            i, f = 0, spectrum[0]
-            difference = None
-            
-            while difference == None or abs(h - f) < difference:
-                difference = abs(h - f)
-                i += 1
-                if i == len(spectrum) - 1:
-                    break
-                
-                f = spectrum[i]
-            
-            correlation += distribution[i]
+            correlation += self.correlate(h, spikes)
+        return correlation / len(spikes)
 
-        return correlation / spikes_num
-
-    def spike_distribution(self, spectrum, spikes):
-        distribution = []
-        
-        for x in spectrum:
-            p = 0
-            for s in spikes:
-                p += e ** -((2 * (x-s[0]) / self.spacing) ** 2)
-            
-            distribution.append(p)
-
-        return distribution
+    def correlate(self, f, spikes):
+        c = 0
+        for s in spikes:
+            c += e ** -((2 * (f - s[0]) / self.spacing) ** 2)
+        return c
 
     def harmonics(self, f):
-        return [f*(h+1) for h in range(self.harmonics_arr_size)]
+        for h in range(self.harmonics_arr_size):
+            yield f * (h + 2)
