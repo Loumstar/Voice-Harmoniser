@@ -1,37 +1,52 @@
 import wave
-from numpy import fft as fourier, linspace, absolute, sin, pi, mean, e
-import matplotlib.pyplot as plot
+from numpy import fft as fourier, linspace, absolute, mean, e
+
+#import matplotlib.pyplot as plot
 
 class PitchScaler:
     def __init__(self, audio_filename):
+        #opens the standard file. Must be wav format.
         self.audio_file = wave.open(audio_filename)
-        self.frame_rate = self.audio_file.getframerate() #in samples per second
+        #number of frames in the waveform captured per second. Typically 44.1 kHz
+        self.frame_rate = self.audio_file.getframerate()
+        #number of bits used to define the waveform
         self.bit_depth = 16 ** self.audio_file.getsampwidth()
+        #the length of the file in seconds.
         self.audio_length = self.audio_file.getnframes() / self.frame_rate
+        
+        #the length in seconds of each section of audio that undergoes fft at once.
+        #smaller lengths are less accurate, but reduce workload.
+        self.clip_length = 0.1
 
-        self.mean_sample_size = 11
+        #sample size is the set of frequencies near to a peak whose amplitudes
+        #are averaged to determine whether that peak is a spike/harmonic, rather
+        #than an 'audio sample'.
+        self.sample_size = 11
+        #the minimum ratio of the amplitude of a peak compared to average amplitude of
+        #frequencies near it in the spectrum that would make that peak a spike.
         self.threshold = 3
 
+        #equivalent to the deviation in the distribution. The value determines at what
+        #difference from a mean does the distribution approach zero.
         self.spacing = 50
 
         self.harmonics_arr_size = 20
         self.spikes_arr_size = 20
 
-    def audio_spectrum(self, start, clip_length):
-        #total number of samples taken for a given
-        clip_frames = int(self.frame_rate * clip_length)
+    def frequency_spectrum(self, start):
+        #total number of frames in each clip
+        clip_frames = int(self.frame_rate * self.clip_length)
 
         #create x axis, which can calculate the existing frequencies up to half 
         #the sampling frequency, due to Nyquist frequency theorem 
         spectrum = linspace(0, self.frame_rate // 2, num=clip_frames // 2)
         
-        #for the moment, will only create a spectrum for a clip taken {start} 
-        #seconds from first byte for {clip_length} number of seconds
-        
-        if start + clip_length < self.audio_length:
-            self.audio_file.setpos(int(start * self.frame_rate)) #set position to the first frame of the starting second
-            clip = list(self.audio_file.readframes(clip_frames)) #read frames in the refresh period starting from the marker
-            
+        if start + self.clip_length < self.audio_length:
+            #set position to the first frame of the starting point
+            self.audio_file.setpos(int(start * self.frame_rate))
+            #read frames in the refresh period starting from the marker
+            clip = list(self.audio_file.readframes(clip_frames))
+            #calculate the amplitude of each frequency using FFT
             amplitude = self._decompose(clip, clip_frames)
             
             return spectrum, amplitude
@@ -39,22 +54,32 @@ class PitchScaler:
         return None
 
     def _decompose(self, clip, clip_frames):        
-        #apply fast-fourier-transform to determine the amplitude and phase of each frequency, given as a complex number.
-        #as x ranges from 0 to 255, the average x will be non zero, giving the whole clip an offset amplitude.
-        #the value of x needs to be within 0 and 1, so x is divided by the audio bit depth
-        offset = mean(clip) / self.bit_depth
-        fft = fourier.fft(list(map(lambda x: (x / self.bit_depth) - offset, clip)))
+        """
+        Method to convert waveform into a frequency spectrum, using fast-fourier transform
+        (FFT) to determine the amplitude and phase of each frequency, given as a complex 
+        number. Phase is not needed so only the magnitude of the number is returned.
+        
+        the offset amplitude of the waveform is the average amplitude of each frame.
+        This is subtracted from each to avoid a large amplitude at the 0Hz frequency.
 
-        #phase of each frequency is disregarded by finding the magnitude of the complex number
-        #each frequency is divided by the number of sample frames and multiplied by two to account
-        #for removing the mirrored frequencies due to Nyquist frequency theory.
-        amplitude = list(map(lambda x: 2 * absolute(x) / clip_frames, fft))
+        The value of x needs to be within 0 and 1, so x is divided by the audio bit depth.
 
+        Each amplitude is divided by the number of frames used in the fft and multiplied by
+        two to account for 'mirrored frequencies' that were removed (see Nyquist Frequency).
+        """
+        #offset is equal to the average amplitude a frame.
+        offset = mean(clip)
+        #apply fast fourier transform. This is the line that does the legwork.
+        fft = fourier.fft(list(map(lambda x: (x - offset) / self.bit_depth, clip)))
+        #converts to a real number, removing the phase.
+        amplitude = list(map(lambda z: 2 * absolute(z) / clip_frames, fft))
+        #only return half the list, due to Nyquist. hence amplitudes are multiplied
+        #above by two to account for the lost 'energy'.
         return amplitude[:clip_frames // 2]
 
-    def determine_pitch(self, start, clip_length):
-        spectrum, amplitude = self.audio_spectrum(start, clip_length)
-        peaks = self.determine_peaks(spectrum, amplitude) #sorted by frequency ascending
+    def determine_pitch(self, start):
+        spectrum, amplitude = self.frequency_spectrum(start)
+        peaks = self.determine_peaks(spectrum, amplitude)
         spikes = self.get_peaks_in_order_of_spike(peaks)
         distribution = self.spike_distribution(spectrum, spikes)
         
@@ -62,18 +87,17 @@ class PitchScaler:
         
         for s in spikes:
             harmonics = self.harmonics(s[0])
-            p = self.compare_harmonics_to_spikes(spectrum, distribution, harmonics, len(spikes))
-            print(s[0], p)
+            p = self.test_harmonics(spectrum, distribution, harmonics, len(spikes))
             note_probability.append(tuple([s[0], p]))
 
+        """
         peaks_f = list(map(lambda x: x[0], peaks))
         peaks_a = list(map(lambda x: x[1], peaks))
 
-        spikes_f = list(map(lambda x: x[0], spikes))
-        spikes_a = list(map(lambda x: x[1], spikes))
-        spikes_n = list(map(lambda x: x[2], spikes))
-
-        print(sum(list(map(lambda x: x[1], note_probability))))
+        spikes_by_frequency = sorted(spikes, reverse=True, key=lambda x: x[0])
+        spikes_f = list(map(lambda x: x[0], spikes_by_frequency))
+        spikes_a = list(map(lambda x: x[1], spikes_by_frequency))
+        spikes_n = list(map(lambda x: x[2], spikes_by_frequency))
         
         plot.plot(
             spectrum, amplitude, 'r',
@@ -84,18 +108,18 @@ class PitchScaler:
         )
 
         plot.show()
-        
+        """
         return note_probability
 
     def determine_peaks(self, spectrum, amplitude):
         """
-        Method that returns the frequencies of the largest peaks.
+        Method that returns a list of maximums or 'peaks' in the spectrum.
         
-        The rate of change of amplitude between neighbouring frequencies is calculated.
-        If the gradient goes from negative to positive, a minimum has been reached. 
+        The rate of change of amplitude between neighbouring frequencies is calculated
+        and f the gradient goes from negative to positive, a minimum has been reached. 
         
-        The largest value between two minima is found and the corresponsing frequency
-        is added to a list.
+        The largest value between two minima is found and added to the list as a tuple
+        of its frequency, amplitude, and the average amplitude between the two minimas.
         """
         peaks = []
         
@@ -117,8 +141,8 @@ class PitchScaler:
 
         return peaks
 
-    def _gradient(self, x, y):
-        return y - x
+    def _gradient(self, y0, y1):
+        return y1 - y0
 
     def _find_peak(self, spectrum, amplitudes):
         """
@@ -148,8 +172,8 @@ class PitchScaler:
         threshold, it is returned in a list of spikes.
         """
         spikes = []
-        lb, ub = (0, self.mean_sample_size)
-        noise = sum([p[2] for p in peaks[lb:ub]]) / self.mean_sample_size
+        lb, ub = (0, self.sample_size)
+        noise = sum([p[2] for p in peaks[lb:ub]]) / self.sample_size
 
         for i, (f, a, _) in enumerate(peaks):
             noise = self._moving_average(noise, peaks, lb, ub)
@@ -157,7 +181,7 @@ class PitchScaler:
             if a / noise > self.threshold:
                 spikes.append([f, a, noise])
             
-            if i > self.mean_sample_size // 2:
+            if i > self.sample_size // 2:
                 lb, ub = lb + 1, ub + 1
 
         return spikes
@@ -174,23 +198,24 @@ class PitchScaler:
         spikes = []
         #as an equal number of frequencies should included in the mean calculation either
         #side of the peak, number is made odd to include peak frequency.
-        lb, ub = 0, self.mean_sample_size
-        noise = sum([p[2] for p in peaks[lb:ub]]) / self.mean_sample_size
+        lb, ub = 0, self.sample_size
+        noise = sum([p[2] for p in peaks[lb:ub]]) / self.sample_size
 
         for i, (f, a, _) in enumerate(peaks):
             #as consecutive averages contain some of the same data points, as opposed to
             #manipulating the same values, only the values to be removed/added are manipulated.
             noise = self._moving_average(noise, peaks, lb, ub)
-            #all peaks are added and then ranked in terms of their 'spikeiness'
-            spikes.append([f, a, noise])
+            #if the ratio of amplitude to background noise exceeds the threshold,
+            #it is likely that the peak is also a spike, and a possible harmonic.
+            if a / noise > self.threshold:
+                spikes.append([f, a, noise])
             #bounds for the calculated mean move with each peak.
-            if i > self.mean_sample_size // 2:
+            if i > self.sample_size // 2:
                 lb, ub = lb + 1, ub + 1
 
         n = len(spikes) if len(spikes) < self.spikes_arr_size else self.spikes_arr_size
 
         return sorted(spikes, reverse=True, key=lambda x: x[1] / x[2])[:n]
-
 
     def _moving_average(self, noise, peaks, lb, ub):
         """
@@ -202,22 +227,24 @@ class PitchScaler:
         old_value = peaks[lb - 1][2] if lb > 0 else 0
         new_value = peaks[ub][2] if ub < len(peaks) else 0
 
-        new_noise = (self.mean_sample_size * noise) - old_value + new_value
+        new_noise = (self.sample_size * noise) - old_value + new_value
 
-        return new_noise / self.mean_sample_size
+        return new_noise / self.sample_size
 
-    def compare_harmonics_to_spikes(self, spectrum, distribution, harmonics, spikes_num):
+    def test_harmonics(self, spectrum, distribution, harmonics, spikes_num):
         #correlation is a value that determines how close to the actual peaks a certain 
         #frequency's harmonics are.
         correlation = 0
         for h in harmonics:
             i, f = 0, spectrum[0]
             difference = None
+            
             while difference == None or abs(h - f) < difference:
                 difference = abs(h - f)
                 i += 1
                 if i == len(spectrum) - 1:
                     break
+                
                 f = spectrum[i]
             
             correlation += distribution[i]
