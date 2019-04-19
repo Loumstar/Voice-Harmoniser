@@ -1,4 +1,6 @@
-from pitch_scaler import PitchScaler
+from pitch_detector import PitchDetector
 
-test = PitchScaler('./Testing many notes.wav')
-print(test.determine_pitch(4.15))
+print(
+    PitchDetector('./Testing many notes.wav')
+        .determine_pitch(4.15)
+)

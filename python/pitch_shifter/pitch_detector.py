@@ -1,9 +1,9 @@
 import wave
 from numpy import fft as fourier, linspace, absolute, mean, e
 
-import matplotlib.pyplot as plot
+#import matplotlib.pyplot as plot
 
-class PitchScaler:
+class PitchDetector:
     def __init__(self, audio_filename):
         #opens the standard file. Must be wav format.
         self.audio_file = wave.open(audio_filename)
@@ -90,7 +90,7 @@ class PitchScaler:
             p = self.test_harmonics(spectrum, distribution, harmonics, len(spikes))
             note_probability.append(tuple([s[0], p]))
 
-        
+        """
         peaks_f = list(map(lambda x: x[0], peaks))
         peaks_a = list(map(lambda x: x[1], peaks))
 
@@ -108,7 +108,7 @@ class PitchScaler:
         )
 
         plot.show()
-        
+        """
         return note_probability
 
     def determine_peaks(self, spectrum, amplitude):
