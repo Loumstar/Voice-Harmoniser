@@ -1,7 +1,7 @@
 import wave
 from numpy import fft as fourier, linspace, absolute, mean, e
 
-#import matplotlib.pyplot as plot
+import matplotlib.pyplot as plot
 
 class PitchScaler:
     def __init__(self, audio_filename):
@@ -24,7 +24,7 @@ class PitchScaler:
         self.sample_size = 11
         #the minimum ratio of the amplitude of a peak compared to average amplitude of
         #frequencies near it in the spectrum that would make that peak a spike.
-        self.threshold = 3
+        self.threshold = 2.5
 
         #equivalent to the deviation in the distribution. The value determines at what
         #difference from a mean does the distribution approach zero.
@@ -80,7 +80,7 @@ class PitchScaler:
     def determine_pitch(self, start):
         spectrum, amplitude = self.frequency_spectrum(start)
         peaks = self.determine_peaks(spectrum, amplitude)
-        spikes = self.get_peaks_in_order_of_spike(peaks)
+        spikes = self.get_peaks_above_threshold(peaks)
         distribution = self.spike_distribution(spectrum, spikes)
         
         note_probability = []
@@ -90,7 +90,7 @@ class PitchScaler:
             p = self.test_harmonics(spectrum, distribution, harmonics, len(spikes))
             note_probability.append(tuple([s[0], p]))
 
-        """
+        
         peaks_f = list(map(lambda x: x[0], peaks))
         peaks_a = list(map(lambda x: x[1], peaks))
 
@@ -108,7 +108,7 @@ class PitchScaler:
         )
 
         plot.show()
-        """
+        
         return note_probability
 
     def determine_peaks(self, spectrum, amplitude):
@@ -165,34 +165,10 @@ class PitchScaler:
 
     def get_peaks_above_threshold(self, peaks):
         """
-        Method to differentiate between what is a spike and what is a small maximum.
-        
-        The ratio of a frequency's amplitude to that of background noise close to that 
-        frequency is a good indicator of a spike, and if the ratio is larger than the
-        threshold, it is returned in a list of spikes.
-        """
-        spikes = []
-        lb, ub = (0, self.sample_size)
-        noise = sum([p[2] for p in peaks[lb:ub]]) / self.sample_size
+        Method that returns the peaks if the ratio between their amplitude and the noise level
+        exceeds the threshold which is used to indicate whether it is a spike.
 
-        for i, (f, a, _) in enumerate(peaks):
-            noise = self._moving_average(noise, peaks, lb, ub)
-            
-            if a / noise > self.threshold:
-                spikes.append([f, a, noise])
-            
-            if i > self.sample_size // 2:
-                lb, ub = lb + 1, ub + 1
-
-        return spikes
-
-    def get_peaks_in_order_of_spike(self, peaks):
-        """
-        Method that returns the peaks in order of the ratio between their amplitude
-        and that of frequencies local to it, which is used to indicate whether it is
-        a spike.
-
-        Return an array of tuples up to a maximum number to reduce computing workload
+        Return an sorted list of tuples up to a maximum number to reduce workload
         later.
         """
         spikes = []
