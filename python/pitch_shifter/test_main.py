@@ -1,6 +1,6 @@
 from pitch_detector import PitchDetector
 
-print(
-    PitchDetector('./Testing many notes.wav')
-        .determine_pitch(4.15)
-)
+test = PitchDetector('../../01 Raise Your Weapon.wav')
+test.print = True
+
+print(test.determine_pitch(1.00))

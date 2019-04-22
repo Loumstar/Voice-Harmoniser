@@ -1,8 +1,7 @@
 import wave
 from numpy import fft as fourier, linspace, absolute, mean, e
-from functools import reduce
 
-#import matplotlib.pyplot as plot
+import matplotlib.pyplot as plot
 
 class PitchDetector:
     """
@@ -24,8 +23,8 @@ class PitchDetector:
         self.audio_length = self.audio_file.getnframes() / self.frame_rate
         
         #the length in seconds of each section of audio that undergoes fft at once.
-        #smaller lengths are less accurate, but reduce workload.
-        self.clip_length = 0.1
+        #smaller lengths return a smaller set of frequencies, but reduce workload.
+        self.clip_length = 0.2
 
         #sample size is the set of frequencies near to a peak whose amplitudes
         #are averaged to determine whether that peak is a spike/harmonic, rather
@@ -33,7 +32,7 @@ class PitchDetector:
         self.sample_size = 11
         #the minimum ratio of the amplitude of a peak compared to average amplitude of
         #frequencies near it in the spectrum that would make that peak a spike.
-        self.threshold = 2.5
+        self.threshold = 2
 
         #equivalent to the deviation in the distribution. The value determines at what
         #difference from a mean does the distribution approach zero.
@@ -41,6 +40,8 @@ class PitchDetector:
 
         self.harmonics_arr_size = 20
         self.spikes_arr_size = 20
+
+        self.print = False
 
     def frequency_spectrum(self, start):
         """
@@ -53,10 +54,11 @@ class PitchDetector:
         #total number of frames in each clip
         clip_frames = int(self.frame_rate * self.clip_length)
 
-        #create x axis, which can calculate the existing frequencies up to half 
-        #the sampling frequency, due to Nyquist frequency theorem 
-        spectrum = linspace(0, self.frame_rate // 2, num=clip_frames // 2)
-        
+        #creates frequency domain for fft. There are (frame rate x clip length)
+        #number of frequencies, of which the maximum frequency is equal to the
+        #frame rate. However these values have been halved due to Nyquist.
+        spectrum = [round(n / self.clip_length) for n in range(clip_frames // 2)]
+
         if start + self.clip_length < self.audio_length:
             #set position to the first frame of the starting point
             self.audio_file.setpos(int(start * self.frame_rate))
@@ -105,25 +107,27 @@ class PitchDetector:
             p = self.test_harmonics(spectrum, spikes, harmonics)
             note_probability.append(tuple([s[0], p]))
 
-        """
-        peaks_f = list(map(lambda x: x[0], peaks))
-        peaks_a = list(map(lambda x: x[1], peaks))
+        if self.print:
+            peaks_f = list(map(lambda x: x[0], peaks))
+            peaks_a = list(map(lambda x: x[1], peaks))
 
-        spikes_by_frequency = sorted(spikes, reverse=True, key=lambda x: x[0])
-        spikes_f = list(map(lambda x: x[0], spikes_by_frequency))
-        spikes_a = list(map(lambda x: x[1], spikes_by_frequency))
-        spikes_n = list(map(lambda x: x[2], spikes_by_frequency))
+            spikes_by_frequency = sorted(spikes, reverse=True, key=lambda x: x[0])
+            spikes_f = list(map(lambda x: x[0], spikes_by_frequency))
+            spikes_a = list(map(lambda x: x[1], spikes_by_frequency))
+            spikes_n = list(map(lambda x: x[2], spikes_by_frequency))
+
+            d = self.get_distribution(spectrum, spikes)
+            
+            plot.plot(
+                spectrum, amplitude, 'r',
+                peaks_f, peaks_a, 'b*',
+                spikes_f, spikes_n, 'b',
+                spikes_f, spikes_a, 'g^',
+                spectrum, d, 'g'
+            )
+
+            plot.show()
         
-        plot.plot(
-            spectrum, amplitude, 'r',
-            peaks_f, peaks_a, 'b*',
-            spikes_f, spikes_n, 'b',
-            spikes_f, spikes_a, 'g^',
-            spectrum, distribution, 'g'
-        )
-
-        plot.show()
-        """
         return note_probability
 
     def determine_peaks(self, spectrum, amplitude):
@@ -237,3 +241,15 @@ class PitchDetector:
     def harmonics(self, f):
         for h in range(self.harmonics_arr_size):
             yield f * (h + 2)
+
+    def get_distribution(self, spectrum, spikes):
+        distribution = []
+        
+        for x in spectrum:
+            p = 0
+            for f, a, _ in spikes:
+                p += a * e ** -((2 * (x-f) / self.spacing) ** 2)
+            
+            distribution.append(p)
+
+        return distribution
