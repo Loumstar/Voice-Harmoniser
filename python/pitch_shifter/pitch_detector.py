@@ -26,10 +26,6 @@ class PitchDetector:
         #smaller lengths return a smaller set of frequencies, but reduce workload.
         self.clip_length = 0.2
 
-        #sample size is the set of frequencies near to a peak whose amplitudes
-        #are averaged to determine whether that peak is a spike/harmonic, rather
-        #than an 'audio sample'.
-        self.sample_size = 11
         #the minimum ratio of the amplitude of a peak compared to average amplitude of
         #frequencies near it in the spectrum that would make that peak a spike.
         self.threshold = 2
@@ -38,8 +34,12 @@ class PitchDetector:
         #difference from a mean does the distribution approach zero.
         self.spacing = 50
 
-        self.get_harmonics_arr_size = 20
+        self.harmonics_arr_size = 20
         self.spikes_arr_size = 20
+        #sample size is the set of frequencies near to a peak whose amplitudes
+        #are averaged to determine whether that peak is a spike/harmonic, rather
+        #than an 'audio sample'.
+        self.sample_arr_size = 11
 
         self.print = False
 
@@ -126,10 +126,10 @@ class PitchDetector:
         prev_a = 0
 
         for i, a in enumerate(amplitude):
-            new_gradient = self._gradient(prev_a, a)
+            new_gradient = self.gradient(prev_a, a)
 
             if prev_min_i != i and new_gradient > 0 and prev_gradient <= 0:
-                peak = self._get_singular_peak(spectrum[prev_min_i:i], amplitude[prev_min_i:i])
+                peak = self.get_singular_peak(spectrum[prev_min_i:i], amplitude[prev_min_i:i])
                 peaks.append(peak)
                 prev_min_i = i
 
@@ -138,10 +138,10 @@ class PitchDetector:
 
         return peaks
 
-    def _gradient(self, y0, y1):
+    def gradient(self, y0, y1):
         return y1 - y0
 
-    def _get_singular_peak(self, spectrum, amplitudes):
+    def get_singular_peak(self, spectrum, amplitudes):
         """
         Method to find the maximum amplitude in a range of frequencies, or a 'peak'.
         Combines each peak with its frequency and the average amplitude between each 
@@ -180,16 +180,16 @@ class PitchDetector:
         spikes.sort(reverse=True, key=lambda x: x[1] / x[2])
         
         if len(spikes) > self.spikes_arr_size:
-            del spikes[self.sample_size:]
+            del spikes[self.sample_arr_size:]
 
         return spikes
 
     def get_average_noise_level(self, peaks):
-        lb, ub = 0, self.sample_size
-        noise_sum = sum([p[2] for p in peaks[0:self.sample_size]])
+        lb, ub = 0, self.sample_arr_size
+        noise_sum = sum([p[2] for p in peaks[0:self.sample_arr_size]])
         
         for i in range(len(peaks)):
-            if i > self.sample_size // 2 and i < len(peaks) - self.sample_size // 2 - 1:
+            if i > (self.sample_arr_size // 2) and i < len(peaks) - (self.sample_arr_size // 2) - 1:
                 lb, ub = lb + 1, ub + 1
                 old, new = peaks[lb-1][2], peaks[ub][2]
             else:
@@ -197,7 +197,7 @@ class PitchDetector:
 
             noise_sum = noise_sum - old + new
 
-            yield noise_sum / self.sample_size
+            yield noise_sum / self.sample_arr_size
 
     def get_note_probabilities(self, spikes):
         notes = []
@@ -227,7 +227,7 @@ class PitchDetector:
         return c
 
     def get_harmonics(self, f):
-        for h in range(self.get_harmonics_arr_size):
+        for h in range(self.harmonics_arr_size):
             yield f * (h + 2)
 
     def plot_clip(self, spectrum, amplitude, spikes):
