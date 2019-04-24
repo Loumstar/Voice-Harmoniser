@@ -38,7 +38,7 @@ class PitchDetector:
         #difference from a mean does the distribution approach zero.
         self.spacing = 50
 
-        self.harmonics_arr_size = 20
+        self.get_harmonics_arr_size = 20
         self.spikes_arr_size = 20
 
         self.print = False
@@ -95,52 +95,31 @@ class PitchDetector:
         #above by two to account for the lost 'energy'.
         return amplitude[:clip_frames // 2]
 
-    def determine_pitch(self, start):
+    def get_pitch(self, start):
+        """
+        Method that combines all methods in the class together to determine the pitch of 
+        a snippet or 'clip' of audio.
+        """
         spectrum, amplitude = self.frequency_spectrum(start)
-        peaks = self.determine_peaks(spectrum, amplitude)
-        spikes = self.get_peaks_above_threshold(peaks)
+        peaks = self.get_peaks(spectrum, amplitude)
         
-        note_probability = []
-        
-        for s in spikes:
-            harmonics = self.harmonics(s[0])
-            p = self.test_harmonics(spectrum, spikes, harmonics)
-            note_probability.append(tuple([s[0], p]))
+        spikes = self.get_spikes(peaks)
 
         if self.print:
-            peaks_f = list(map(lambda x: x[0], peaks))
-            peaks_a = list(map(lambda x: x[1], peaks))
-
-            spikes_by_frequency = sorted(spikes, reverse=True, key=lambda x: x[0])
-            spikes_f = list(map(lambda x: x[0], spikes_by_frequency))
-            spikes_a = list(map(lambda x: x[1], spikes_by_frequency))
-            spikes_n = list(map(lambda x: x[2], spikes_by_frequency))
-
-            d = self.get_distribution(spectrum, spikes)
-            
-            plot.plot(
-                spectrum, amplitude, 'r',
-                peaks_f, peaks_a, 'b*',
-                spikes_f, spikes_n, 'b',
-                spikes_f, spikes_a, 'g^',
-                spectrum, d, 'g'
-            )
-
-            plot.show()
+            self.plot_clip(spectrum, amplitude, spikes)
         
-        return note_probability
+        return self.get_note_probabilities(spikes)
 
-    def determine_peaks(self, spectrum, amplitude):
+    def get_peaks(self, spectrum, amplitude):
         """
         Method that returns a list of maximums or 'peaks' in the spectrum.
         
         The rate of change of amplitude between neighbouring frequencies is calculated
-        and f the gradient goes from negative to positive, a minimum has been reached. 
+        and if the gradient goes from negative to positive, a minimum has been reached. 
         
         The largest value between two minima is found and added to the list as a tuple
         of its frequency, amplitude, and the average amplitude between the two minimas.
         """
-
         peaks = []
         prev_gradient = 0
         prev_min_i = 0
@@ -150,7 +129,7 @@ class PitchDetector:
             new_gradient = self._gradient(prev_a, a)
 
             if prev_min_i != i and new_gradient > 0 and prev_gradient <= 0:
-                peak = self._find_peak(spectrum[prev_min_i:i], amplitude[prev_min_i:i])
+                peak = self._get_singular_peak(spectrum[prev_min_i:i], amplitude[prev_min_i:i])
                 peaks.append(peak)
                 prev_min_i = i
 
@@ -162,7 +141,7 @@ class PitchDetector:
     def _gradient(self, y0, y1):
         return y1 - y0
 
-    def _find_peak(self, spectrum, amplitudes):
+    def _get_singular_peak(self, spectrum, amplitudes):
         """
         Method to find the maximum amplitude in a range of frequencies, or a 'peak'.
         Combines each peak with its frequency and the average amplitude between each 
@@ -180,7 +159,7 @@ class PitchDetector:
 
         return f, a_max, a_mean
 
-    def get_peaks_above_threshold(self, peaks):
+    def get_spikes(self, peaks):
         """
         Method that returns the peaks if the ratio between their amplitude and the noise level
         exceeds the threshold which is used to indicate whether it is a spike.
@@ -189,60 +168,82 @@ class PitchDetector:
         later.
         """
         spikes = []
-        #as an equal number of frequencies should included in the mean calculation either
-        #side of the peak, number is made odd to include peak frequency.
-        lb, ub = 0, self.sample_size
-        noise = sum([p[2] for p in peaks[lb:ub]]) / self.sample_size
+        average_noise_level = self.get_average_noise_level(peaks)
 
-        for i, (f, a, _) in enumerate(peaks):
-            #as consecutive averages contain some of the same data points, as opposed to
-            #manipulating the same values, only the values to be removed/added are manipulated.
-            noise = self._moving_average(noise, peaks, lb, ub)
+        for f, a, _ in peaks:
+            noise = next(average_noise_level)
             #if the ratio of amplitude to background noise exceeds the threshold,
             #it is likely that the peak is also a spike, and a possible harmonic.
             if a / noise > self.threshold:
                 spikes.append(tuple([f, a, noise]))
-            #bounds for the calculated mean move with each peak.
-            if i > self.sample_size // 2:
+
+        spikes.sort(reverse=True, key=lambda x: x[1] / x[2])
+        
+        if len(spikes) > self.spikes_arr_size:
+            del spikes[self.sample_size:]
+
+        return spikes
+
+    def get_average_noise_level(self, peaks):
+        lb, ub = 0, self.sample_size
+        noise_sum = sum([p[2] for p in peaks[0:self.sample_size]])
+        
+        for i in range(len(peaks)):
+            if i > self.sample_size // 2 and i < len(peaks) - self.sample_size // 2 - 1:
                 lb, ub = lb + 1, ub + 1
+                old, new = peaks[lb-1][2], peaks[ub][2]
+            else:
+                old, new = 0, 0
 
-        n = len(spikes) if len(spikes) < self.spikes_arr_size else self.spikes_arr_size
+            noise_sum = noise_sum - old + new
 
-        return sorted(spikes, reverse=True, key=lambda x: x[1] / x[2])[:n]
+            yield noise_sum / self.sample_size
 
-    def _moving_average(self, noise, peaks, lb, ub):
-        """
-        Method to return the average noise quicker than summing elements in a list.
-        Because all values except the lowest value are part of the average, it is quicker
-        to simply remove the last value, add the new one and divided by the size of the 
-        dataset.
-        """
-        old_value = peaks[lb - 1][2] if lb > 0 else 0
-        new_value = peaks[ub][2] if ub < len(peaks) else 0
+    def get_note_probabilities(self, spikes):
+        notes = []
+        
+        for s in spikes:
+            get_harmonics = self.get_harmonics(s[0])
+            p = self.test_harmonics(spikes, get_harmonics)
+            
+            notes.append(tuple([s[0], p]))
 
-        new_noise = (self.sample_size * noise) - old_value + new_value
+        return notes
 
-        return new_noise / self.sample_size
-
-    def test_harmonics(self, spectrum, spikes, harmonics):
+    def test_harmonics(self, spikes, get_harmonics):
         #correlation is a value that determines how close to the actual peaks a certain 
-        #frequency's harmonics are.
+        #frequency's get_harmonics are.
         correlation = 0
-        for h in harmonics:
-            correlation += self.correlate(h, spikes)
+        
+        for h in get_harmonics:
+            correlation += self.get_correlation(h, spikes)
+        
         return correlation / len(spikes)
 
-    def correlate(self, f, spikes):
+    def get_correlation(self, f, spikes):
         c = 0
         for s in spikes:
             c += e ** -((2 * (f - s[0]) / self.spacing) ** 2)
         return c
 
-    def harmonics(self, f):
-        for h in range(self.harmonics_arr_size):
+    def get_harmonics(self, f):
+        for h in range(self.get_harmonics_arr_size):
             yield f * (h + 2)
 
-    def get_distribution(self, spectrum, spikes):
+    def plot_clip(self, spectrum, amplitude, spikes):
+        spikes_f, spikes_a, spikes_n = self.split_and_sort_spike_tuples(spikes)
+        spike_distribution = self.get_full_distribution(spectrum, spikes)
+        
+        plot.plot(
+            spectrum, amplitude, 'r',
+            spikes_f, spikes_n, 'b',
+            spikes_f, spikes_a, 'g^',
+            spectrum, spike_distribution, 'g'
+        )
+
+        plot.savefig('./frequency_spectrum.pdf')
+
+    def get_full_distribution(self, spectrum, spikes):
         distribution = []
         
         for x in spectrum:
@@ -253,3 +254,13 @@ class PitchDetector:
             distribution.append(p)
 
         return distribution
+
+    def split_and_sort_spike_tuples(self, spikes):
+        freq, amp, noise = [], [], []
+        
+        for (f, a, n) in sorted(spikes, reverse=True, key=lambda x: x[0]):
+            freq.append(f)
+            amp.append(a)
+            noise.append(n)
+
+        return freq, amp, noise
