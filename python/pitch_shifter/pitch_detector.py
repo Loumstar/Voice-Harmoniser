@@ -1,5 +1,5 @@
 import wave
-from numpy import fft as fourier, linspace, absolute, mean, e
+from numpy import fft as fourier, absolute, mean, e
 
 import matplotlib.pyplot as plot
 
@@ -8,10 +8,11 @@ class PitchDetector:
     Class to open an audio file and analyse its waveform to determine its
     pitch across a small interval or 'clip'.
 
-    audio_filename:
+    Parameters
+    ----------
+    audio_filename: 
     A string of the path to the target audio file. Can be absolute or relative.
     """
-    
     def __init__(self, audio_filename):
         #opens the standard file. Must be wav format.
         self.audio_file = wave.open(audio_filename)
@@ -26,27 +27,29 @@ class PitchDetector:
         #smaller lengths return a smaller set of frequencies, but reduce workload.
         self.clip_length = 0.2
 
-        #the minimum ratio of the amplitude of a peak compared to average amplitude of
-        #frequencies near it in the spectrum that would make that peak a spike.
-        self.threshold = 2
+        #the minimum ratio of the amplitude of a frequency compared to average amplitude of
+        #frequencies near it in the spectrum that would make it a peak.
+        self.threshold = 2.75
+        #the minimum probability that a note representing the frequency spectrum can have and
+        #be added to the list of probabilities.
+        self.probability_threshold = 10 ** -3
 
         #equivalent to the deviation in the distribution. The value determines at what
         #difference from a mean does the distribution approach zero.
         self.spacing = 50
 
         self.harmonics_arr_size = 20
-        self.spikes_arr_size = 20
-        #sample size is the set of frequencies near to a peak whose amplitudes
-        #are averaged to determine whether that peak is a spike/harmonic, rather
-        #than an 'audio sample'.
-        self.sample_arr_size = 11
+        self.peaks_arr_size = 20
+
+        self.sample_arr_size = 75
 
         self.print = False
 
     def frequency_spectrum(self, start):
         """
         Method to return the frequency spectrum and corresponding amplitudes.
-
+        Parameters
+        ----------
         start:
         the number of seconds after the start of the track from where analysis 
         begins.
@@ -69,7 +72,7 @@ class PitchDetector:
             
             return spectrum, amplitude
         
-        return None
+        raise ValueError("The clip being analysed goes beyond the end of the audio file.")
 
     def _decompose(self, clip, clip_frames):        
         """
@@ -97,101 +100,87 @@ class PitchDetector:
 
     def get_pitch(self, start):
         """
-        Method that combines all methods in the class together to determine the pitch of 
-        a snippet or 'clip' of audio.
+        Method that returns a list of frequencies whose harmonics represent the frequency
+        spectrum of a clip the best.
+
+        spectrum is a list of all the frequencies calculated using FFT.
+        
+        amplitudes is a list of the amplitudes corresponding to the frequencies in 
+        the variable, spectrum.
+
+        peaks are the singular amplitudes that have a significantly larger amplitude
+        compared to its surrounding frequencies, leading to the assumption they are
+        harmonics.
+
+        Parameters
+        ----------
+        start:
+        A float value of the time into the audio, in seconds, at which the analuysis 
+        begins.
         """
         spectrum, amplitude = self.frequency_spectrum(start)
         peaks = self.get_peaks(spectrum, amplitude)
-        
-        spikes = self.get_spikes(peaks)
 
         if self.print:
-            self.plot_clip(spectrum, amplitude, spikes)
+            self.plot_clip(spectrum, amplitude, peaks)
         
-        return self.get_note_probabilities(spikes)
+        return self.get_note_probabilities(peaks)
+
 
     def get_peaks(self, spectrum, amplitude):
         """
-        Method that returns a list of maximums or 'peaks' in the spectrum.
-        
-        The rate of change of amplitude between neighbouring frequencies is calculated
-        and if the gradient goes from negative to positive, a minimum has been reached. 
-        
-        The largest value between two minima is found and added to the list as a tuple
-        of its frequency, amplitude, and the average amplitude between the two minimas.
+        Method to determine the peaks in a frequency spectrum. These are determined by 
+        comparing their amplitudes to the average amplitude of surrounding frequencies.
+
+        If this ratio is above the threshold, they are added to a list and returned.
+
+        Parameters
+        ----------
+        spectrum:
+        The range of frequencies found using FFT.
+
+        amplitude:
+        The amplitudes corresponding to each frequency in spectrum.
         """
         peaks = []
-        prev_gradient = 0
-        prev_min_i = 0
-        prev_a = 0
+        average_noise_level = self._get_average_noise_level(amplitude)
 
         for i, a in enumerate(amplitude):
-            new_gradient = self.gradient(prev_a, a)
+            noise = next(average_noise_level)
 
-            if prev_min_i != i and new_gradient > 0 and prev_gradient <= 0:
-                peak = self.get_singular_peak(spectrum[prev_min_i:i], amplitude[prev_min_i:i])
-                peaks.append(peak)
-                prev_min_i = i
+            if a / noise > self.threshold:
+                peaks.append(tuple([spectrum[i], a, noise]))
 
-            prev_gradient = new_gradient
-            prev_a = a
+        peaks.sort(reverse=True, key=lambda x: x[1] / x[2])
+        
+        if len(peaks) > self.peaks_arr_size:
+            del peaks[self.sample_arr_size:]
 
         return peaks
 
-    def gradient(self, y0, y1):
-        return y1 - y0
-
-    def get_singular_peak(self, spectrum, amplitudes):
+    def _get_average_noise_level(self, amplitude):
         """
-        Method to find the maximum amplitude in a range of frequencies, or a 'peak'.
-        Combines each peak with its frequency and the average amplitude between each 
-        minima.
-        """
-        f, a_max, a_sum = None, 0, 0
-        for i, a in enumerate(amplitudes):
-            if a_max < a or f == None:
-                a_max = a
-                f = spectrum[i]
-            
-            a_sum += a
-
-        a_mean = a_sum / len(amplitudes)
-
-        return f, a_max, a_mean
-
-    def get_spikes(self, peaks):
-        """
-        Method that returns the peaks if the ratio between their amplitude and the noise level
-        exceeds the threshold which is used to indicate whether it is a spike.
-
-        Return an sorted list of tuples up to a maximum number to reduce workload
-        later.
-        """
-        spikes = []
-        average_noise_level = self.get_average_noise_level(peaks)
-
-        for f, a, _ in peaks:
-            noise = next(average_noise_level)
-            #if the ratio of amplitude to background noise exceeds the threshold,
-            #it is likely that the peak is also a spike, and a possible harmonic.
-            if a / noise > self.threshold:
-                spikes.append(tuple([f, a, noise]))
-
-        spikes.sort(reverse=True, key=lambda x: x[1] / x[2])
+        Method that returns a generator, which is used to calculate the average amplitude
+        of surrounding frequencies. 
         
-        if len(spikes) > self.spikes_arr_size:
-            del spikes[self.sample_arr_size:]
+        The range of freequencies used in the calculation is given by sample_arr_size.
 
-        return spikes
+        As the calculate moves through the spectrum, it is more efficient to keep track of
+        a sum of the amplitudes, removing those that leave the sample while adding those
+        enter, reducing computing workload.
 
-    def get_average_noise_level(self, peaks):
+        Parameters
+        ----------
+        amplitude:
+        The list of ampltiudes of each frequency, in order of increasing frequency.
+        """
         lb, ub = 0, self.sample_arr_size
-        noise_sum = sum([p[2] for p in peaks[0:self.sample_arr_size]])
+        noise_sum = sum(amplitude[0:self.sample_arr_size])
         
-        for i in range(len(peaks)):
-            if i > (self.sample_arr_size // 2) and i < len(peaks) - (self.sample_arr_size // 2) - 1:
+        for i in range(len(amplitude)):
+            if i > (self.sample_arr_size // 2) and i < len(amplitude) - (self.sample_arr_size // 2) - 1:
                 lb, ub = lb + 1, ub + 1
-                old, new = peaks[lb-1][2], peaks[ub][2]
+                old, new = amplitude[lb-1], amplitude[ub]
             else:
                 old, new = 0, 0
 
@@ -199,66 +188,145 @@ class PitchDetector:
 
             yield noise_sum / self.sample_arr_size
 
-    def get_note_probabilities(self, spikes):
+    def get_note_probabilities(self, peaks):
+        """
+        Method that returns a list of tuples containing a note and a value corresponding
+        to their 'goodness of fit' to the list of peaks.
+
+        If the value is 1, the frequency represents the spectrum exactly, else value is
+        between 0 and 1.
+
+        Parameters
+        ----------
+        peaks:
+        A list of tuples containing the frequency, amplitude and surrounding noise
+        of each frequency identified as a peak.
+        """
         notes = []
         
-        for s in spikes:
-            get_harmonics = self.get_harmonics(s[0])
-            p = self.test_harmonics(spikes, get_harmonics)
+        for p in peaks:
+            harmonics = self.get_harmonics(p[0])
+            probability = self.test_harmonics(peaks, harmonics)
             
-            notes.append(tuple([s[0], p]))
+            if probability > self.probability_threshold:
+                notes.append(tuple([p[0], probability]))
 
         return notes
 
-    def test_harmonics(self, spikes, get_harmonics):
-        #correlation is a value that determines how close to the actual peaks a certain 
-        #frequency's get_harmonics are.
+    def test_harmonics(self, peaks, harmonics):
+        """
+        Method to test an individual note by comparing each of its harmonics to the
+        distribution of peaks in the frequency spectrum.
+
+        Parameters
+        ----------
+        peaks:
+        A list of tuples containing the frequency, amplitude and surrounding noise
+        of each frequency identified as a peak.
+
+        harmonics:
+        A list of frequencies that are harmonics of a given fundamental frequency.
+        """
         correlation = 0
         
-        for h in get_harmonics:
-            correlation += self.get_correlation(h, spikes)
+        for h in harmonics:
+            correlation += self.get_correlation(h, peaks)
         
-        return correlation / len(spikes)
+        return correlation / len(peaks)
 
-    def get_correlation(self, f, spikes):
+    def get_correlation(self, f, peaks):
+        """
+        Method that returns the goodness of fit of a singular harmonic to any of the peaks.
+        This is done using a variation on the equation for the bell curve.
+
+        Parameters
+        ----------
+        f:
+        The value of the frequency being tested. Must be float or int.
+
+        peaks:
+        A list of tuples containing the frequency, amplitude and surrounding noise
+        of each frequency identified as a peak.
+        """
         c = 0
-        for s in spikes:
+        for s in peaks:
             c += e ** -((2 * (f - s[0]) / self.spacing) ** 2)
+        
         return c
 
     def get_harmonics(self, f):
+        """
+        Method that returns a generator of the harmonics of a given frequency.
+
+        Parameters
+        ----------
+        f:
+        The fundamental frequency that the harmonics are based off of.
+        """
         for h in range(self.harmonics_arr_size):
             yield f * (h + 2)
 
-    def plot_clip(self, spectrum, amplitude, spikes):
-        spikes_f, spikes_a, spikes_n = self.split_and_sort_spike_tuples(spikes)
-        spike_distribution = self.get_full_distribution(spectrum, spikes)
+    def plot_clip(self, spectrum, amplitude, peaks):
+        """
+        Method to plot the frequemcy spectrum including the variation in noise and
+        the distribution of peaks.
+
+        Parameters
+        ---------
+        spectrum:
+        The range of frequencies found using FFT.
+
+        amplitude:
+        The amplitudes corresponding to each frequency in spectrum.
+
+        peaks:
+        A list of tuples containing the frequency, amplitude and surrounding noise
+        of each frequency identified as a peak.
+        """
+        freq, amp, noise = self._split_and_sort(peaks)
+        probability_distribution = self.get_full_distribution(spectrum, peaks)
         
         plot.plot(
             spectrum, amplitude, 'r',
-            spikes_f, spikes_n, 'b',
-            spikes_f, spikes_a, 'g^',
-            spectrum, spike_distribution, 'g'
+            freq, noise, 'b',
+            freq, amp, 'g^',
+            spectrum, probability_distribution, 'g'
         )
 
         plot.savefig('./frequency_spectrum.pdf')
+        #plot.show()
 
-    def get_full_distribution(self, spectrum, spikes):
+    def get_full_distribution(self, spectrum, peaks):
+        """
+        Method to return a graph of the bell curves for each peak.
+        
+        Parameters
+        ----------
+        spectrum:
+        The range of frequencies found using FFT.
+
+        amplitude:
+        The amplitudes corresponding to each frequency in spectrum.
+
+        peaks:
+        A list of tuples containing the frequency, amplitude and surrounding noise
+        of each frequency identified as a peak.
+        """
         distribution = []
         
         for x in spectrum:
             p = 0
-            for f, a, _ in spikes:
+            for f, a, _ in peaks:
                 p += a * e ** -((2 * (x-f) / self.spacing) ** 2)
             
             distribution.append(p)
 
         return distribution
 
-    def split_and_sort_spike_tuples(self, spikes):
+    def _split_and_sort(self, peaks):
         freq, amp, noise = [], [], []
         
-        for (f, a, n) in sorted(spikes, reverse=True, key=lambda x: x[0]):
+        for (f, a, n) in sorted(peaks, reverse=True, key=lambda x: x[0]):
             freq.append(f)
             amp.append(a)
             noise.append(n)
