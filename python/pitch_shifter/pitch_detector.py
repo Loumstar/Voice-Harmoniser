@@ -294,7 +294,7 @@ class PitchDetector:
         )
 
         plot.savefig('./frequency_spectrum.pdf')
-        #plot.show()
+        plot.show()
 
     def get_full_distribution(self, spectrum, peaks):
         """
