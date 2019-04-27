@@ -29,7 +29,7 @@ class PitchDetector:
 
         #the minimum ratio of the amplitude of a frequency compared to average amplitude of
         #frequencies near it in the spectrum that would make it a peak.
-        self.threshold = 2.75
+        self.threshold = 3
         #the minimum probability that a note representing the frequency spectrum can have and
         #be added to the list of probabilities.
         self.probability_threshold = 10 ** -3
@@ -48,6 +48,7 @@ class PitchDetector:
     def frequency_spectrum(self, start):
         """
         Method to return the frequency spectrum and corresponding amplitudes.
+        
         Parameters
         ----------
         start:
@@ -60,13 +61,13 @@ class PitchDetector:
         #creates frequency domain for fft. There are (frame rate x clip length)
         #number of frequencies, of which the maximum frequency is equal to the
         #frame rate. However these values have been halved due to Nyquist.
-        spectrum = [round(n / self.clip_length) for n in range(clip_frames // 2)]
+        spectrum = tuple(round(n / self.clip_length) for n in range(clip_frames // 2))
 
         if start + self.clip_length < self.audio_length:
             #set position to the first frame of the starting point
             self.audio_file.setpos(int(start * self.frame_rate))
             #read frames in the refresh period starting from the marker
-            clip = list(self.audio_file.readframes(clip_frames))
+            clip = tuple(self.audio_file.readframes(clip_frames))
             #calculate the amplitude of each frequency using FFT
             amplitude = self._decompose(clip, clip_frames)
             
@@ -91,9 +92,9 @@ class PitchDetector:
         #offset is equal to the average amplitude a frame.
         offset = mean(clip)
         #apply fast fourier transform. This is the line that does the legwork.
-        fft = fourier.fft(list(map(lambda x: (x - offset) / self.bit_depth, clip)))
+        fft = fourier.fft(tuple(map(lambda x: (x - offset) / self.bit_depth, clip)))
         #converts to a real number, removing the phase.
-        amplitude = list(map(lambda z: 2 * absolute(z) / clip_frames, fft))
+        amplitude = tuple(map(lambda z: 2 * absolute(z) / clip_frames, fft))
         #only return half the list, due to Nyquist. hence amplitudes are multiplied
         #above by two to account for the lost 'energy'.
         return amplitude[:clip_frames // 2]
@@ -143,13 +144,16 @@ class PitchDetector:
         The amplitudes corresponding to each frequency in spectrum.
         """
         peaks = []
+        prev_a = 0
         average_noise_level = self._get_average_noise_level(amplitude)
 
         for i, a in enumerate(amplitude):
             noise = next(average_noise_level)
 
-            if a / noise > self.threshold:
+            if a / noise > self.threshold and self._is_max(prev_a, a, amplitude[i+1]):
                 peaks.append(tuple([spectrum[i], a, noise]))
+
+            prev_a = a
 
         peaks.sort(reverse=True, key=lambda x: x[1] / x[2])
         
@@ -187,6 +191,24 @@ class PitchDetector:
             noise_sum = noise_sum - old + new
 
             yield noise_sum / self.sample_arr_size
+
+    def _is_max(self, y0, y1, y2):
+        """
+        Method that determines if y1 is a maximum.
+        Assertion is made by checking the gradient before y1 is positive and the gradient
+        after is negative.
+
+        Parameters
+        ----------
+
+        y0:
+        The previous y value.
+        y1:
+        The y value being tested.
+        y2:
+        The next y value.
+        """
+        return True if (y1 - y0 > 0) and (y2 - y1 < 0) else False
 
     def get_note_probabilities(self, peaks):
         """
@@ -299,6 +321,8 @@ class PitchDetector:
     def get_full_distribution(self, spectrum, peaks):
         """
         Method to return a graph of the bell curves for each peak.
+        Not exactly equal to the correlation method, but helps explain how
+        the correlation method works
         
         Parameters
         ----------
@@ -315,11 +339,13 @@ class PitchDetector:
         distribution = []
         
         for x in spectrum:
-            p = 0
+            max_p, p = 0, 0
             for f, a, _ in peaks:
-                p += a * e ** -((2 * (x-f) / self.spacing) ** 2)
+                p = a * e ** -((2 * (x-f) / self.spacing) ** 2)
+                if p > max_p:
+                    max_p = p
             
-            distribution.append(p)
+            distribution.append(max_p)
 
         return distribution
 
