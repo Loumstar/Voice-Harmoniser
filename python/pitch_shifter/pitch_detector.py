@@ -127,7 +127,6 @@ class PitchDetector:
         
         return self.get_note_probabilities(peaks)
 
-
     def get_peaks(self, spectrum, amplitude):
         """
         Method to determine the peaks in a frequency spectrum. These are determined by 
@@ -200,11 +199,12 @@ class PitchDetector:
 
         Parameters
         ----------
-
         y0:
         The previous y value.
+
         y1:
         The y value being tested.
+
         y2:
         The next y value.
         """
@@ -305,7 +305,7 @@ class PitchDetector:
         A list of tuples containing the frequency, amplitude and surrounding noise
         of each frequency identified as a peak.
         """
-        freq, amp, noise = self._split_and_sort(peaks)
+        freq, amp, noise = zip(*sorted(peaks, reverse=True, key=lambda x: x[0]))
         probability_distribution = self.get_full_distribution(spectrum, peaks)
         
         plot.plot(
@@ -339,22 +339,12 @@ class PitchDetector:
         distribution = []
         
         for x in spectrum:
-            max_p, p = 0, 0
-            for f, a, _ in peaks:
-                p = a * e ** -((2 * (x-f) / self.spacing) ** 2)
-                if p > max_p:
-                    max_p = p
+            max_y, y = 0, 0
             
-            distribution.append(max_p)
+            for f, a, _ in peaks:
+                y = a * e ** -((2 * (x-f) / self.spacing) ** 2)
+                max_y = y if max_y < y else max_y
+            
+            distribution.append(max_y)
 
         return distribution
-
-    def _split_and_sort(self, peaks):
-        freq, amp, noise = [], [], []
-        
-        for (f, a, n) in sorted(peaks, reverse=True, key=lambda x: x[0]):
-            freq.append(f)
-            amp.append(a)
-            noise.append(n)
-
-        return freq, amp, noise
