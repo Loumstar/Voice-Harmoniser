@@ -286,7 +286,7 @@ class PitchDetector:
         The fundamental frequency that the harmonics are based off of.
         """
         for h in range(self.harmonics_arr_size):
-            yield f * (h + 2)
+            yield f * (h + 1)
 
     def plot_clip(self, spectrum, amplitude, peaks):
         """
