@@ -143,16 +143,13 @@ class PitchDetector:
         The amplitudes corresponding to each frequency in spectrum.
         """
         peaks = []
-        prev_a = 0
         average_noise_level = self._get_average_noise_level(amplitude)
 
         for i, a in enumerate(amplitude):
             noise = next(average_noise_level)
 
-            if a / noise > self.threshold and self._is_max(prev_a, a, amplitude[i+1]):
+            if a / noise > self.threshold and self._is_max(amplitude[i-1], a, amplitude[i+1]):
                 peaks.append(tuple([spectrum[i], a, noise]))
-
-            prev_a = a
 
         peaks.sort(reverse=True, key=lambda x: x[1] / x[2])
         
