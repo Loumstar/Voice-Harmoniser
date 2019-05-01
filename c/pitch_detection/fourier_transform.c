@@ -9,8 +9,8 @@ void _fft(double complex waveform[], double complex spectrum[], int n, int step)
 	if(step < n){
 		_fft(spectrum, waveform, n, step * 2);
 		_fft(spectrum + step, waveform + step, n, step * 2);
- 
-		for (int i = 0; i < n; i += 2 * step) {
+		
+        for (int i = 0; i < n; i += 2 * step){
 			double complex t = cexp(-I * PI * i / n) * spectrum[i + step];
 			
             waveform[i / 2] = spectrum[i] + t;
