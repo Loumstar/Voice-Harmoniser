@@ -26,7 +26,7 @@ int* get_spectrum(){
     return s;
 }
 
-int mean(double complex arr[]){
+double mean(double complex arr[]){
     int sum = 0,
         length = sizeof(*arr) / sizeof(double complex);
     for(int i = 0; i < length; i++){
@@ -35,33 +35,42 @@ int mean(double complex arr[]){
     return sum / length;
 }
 
-double complex remove_offset(double complex clip[], int offset){
+void remove_offset(double complex clip[], double offset){
     int length = sizeof(*clip) / sizeof(double complex);
     for(int i = 0; i < length; i++){
         clip[i] = creal(clip[i]) + (I * ((cimag(clip[i]) / BIT_DEPTH) - offset));
     }
-    return *clip;
 }
 
 void _decompose(double complex clip[]){
-    int offset = mean(clip);
+    double offset = mean(clip);
     remove_offset(clip, offset);
     fft(clip);
 }
 
-double complex get_pitch(double complex clip[]){
-    _decompose(clip);
-    double complex peaks = get_peaks(clip);
-    return get_note_probabilities(peaks);
+double get_noise_level(int f, double complex clip[]){
+    double sum = 0;
+    for(int i = f - floor(SAMPLE_ARR_SIZE); i < f + floor(SAMPLE_ARR_SIZE); i++){
+        sum += cimag(clip[i]);
+    }
+    return sum / SAMPLE_ARR_SIZE;
 }
 
-double complex get_peaks(double complex clip[]){
+bool _is_maxima(double complex y0, double complex y1, double complex y2){
+    if((cimag(y1) - cimag(y0) > 0) && (cimag(y2) - cimag(y1) < 0)){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+double complex* get_peaks(double complex clip[]){
     int length = sizeof(*clip) / sizeof(double complex);
     int peaks_count = 0;
+    double noise;
     for(int f = 0; f < length; f++){
-        double noise = get_noise_level();
-        if(cimag(clip[f]) / noise > THRESHOLD &&
-        _is_max_amplitude(clip[f-1], clip[f], clip[f+1])){
+        noise = get_noise_level(f, clip);
+        if(cimag(clip[f]) / noise > THRESHOLD && _is_maxima(clip[f-1], clip[f], clip[f+1])){
             peaks_count++;
         } else {
             clip[f] = (double complex) 0;
@@ -77,9 +86,26 @@ double complex get_peaks(double complex clip[]){
         }
         f++;
     }
-    return *peaks;
+    return peaks;
 }
 
-double get_noise_level();
-bool _is_max_amplitude();
-double complex get_note_probabilities();
+double complex* get_note_probabilities(double complex peaks[]){
+    int length = sizeof(*peaks) / sizeof(double complex);
+    
+    double complex* notes = malloc(sizeof(double complex) * length);
+    int* harmonics = malloc(sizeof(int) * HARMONICS_ARR_SIZE);
+    
+    double probability;
+    for(int p = 0; p < length; p++){
+        harmonics = get_harmonics(peaks[p]);
+        probability = test_harmonics(peaks, harmonics);
+        notes[p] = creal(peaks[p]) + (probability * I);
+    }
+    return notes;
+}
+
+double complex* get_pitch(double complex clip[]){
+    _decompose(clip);
+    double complex* peaks = get_peaks(clip);
+    return get_note_probabilities(peaks);
+}

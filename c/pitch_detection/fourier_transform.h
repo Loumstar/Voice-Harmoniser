@@ -36,7 +36,3 @@ double complex fft(double complex waveform[])
     
     return *waveform;
 }
-
-int main(){
-	return 0;
-}
