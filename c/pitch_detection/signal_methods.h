@@ -1,10 +1,9 @@
 #include <complex.h>
 
-#define FRAME_RATE 4096
+#define FRAME_RATE 44100
 #define BIT_DEPTH 1
-#define CLIP_LENGTH 1
 
-#define CLIP_FRAMES (size_t) FRAME_RATE * CLIP_LENGTH //must be a power of 2
+#define CLIP_FRAMES (size_t) 4096 //must be a power of 2
 
 double mean(double complex arr[], size_t length){
     double sum = 0;

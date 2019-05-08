@@ -4,10 +4,11 @@
 #include "peaks_correlation.h"
 
 #define THRESHOLD 3.0
+
 #define SAMPLE_ARR_SIZE (size_t) 75
 #define PEAKS_ARR_SIZE (size_t) 20
 
-#define FLOAT_COMPARISON_ERROR (double) 0.001
+#define FLOAT_COMPARISON_ERROR (double) 0.01
 
 bool _bin_is_non_zero(double a){
     return a > FLOAT_COMPARISON_ERROR;
@@ -49,9 +50,13 @@ void _convert_to_frequency_domain(double complex clip[]){
 frequency_bin* get_peaks(double complex clip[]){
     frequency_bin* peaks = malloc(FREQUENCY_BIN_SIZE * PEAKS_ARR_SIZE);
     if(peaks == NULL){
-        printf("Malloc error at get_peaks() method: failed while requesting %zu bytes.\n", FREQUENCY_BIN_SIZE * PEAKS_ARR_SIZE);
+        printf(
+            "Malloc error at get_peaks() method: failed while requesting %zu bytes.\n",
+            FREQUENCY_BIN_SIZE * PEAKS_ARR_SIZE
+        );
         return NULL;
     }
+    
     double noise, ampltde;
     size_t i = 0;
     
@@ -65,7 +70,7 @@ frequency_bin* get_peaks(double complex clip[]){
             && _is_above_threshold(ampltde, noise)
         ){
             peaks[i][0] = (double) f;
-            peaks[i][1] = ampltde;
+            peaks[i][1] = (double) ampltde * 2 / CLIP_FRAMES;
             i++;
         }
     }

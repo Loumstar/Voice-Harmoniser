@@ -1,11 +1,12 @@
 #include "pitch_detection.h"
 
-#define SIGNAL_MALLOC_ERROR NAN + (I * NAN)
-
 double complex* createSignal(double complex a[], double offset, size_t length){
     double complex* signl = malloc(sizeof(double complex) * CLIP_FRAMES);
     if(signl == NULL){
-        printf("Malloc error during createSignal() method: failed while requesting %zu bytes.", sizeof(double complex) * CLIP_FRAMES);
+        printf(
+            "Malloc error during createSignal() method: failed while requesting %zu bytes.", 
+            sizeof(double complex) * CLIP_FRAMES
+        );
         return NULL;
     }
     for(size_t i = 0; i < CLIP_FRAMES; i++){
@@ -28,17 +29,16 @@ int main(){
     };
     
     size_t a_size = sizeof(a) / sizeof(double complex);
-    
-    double complex* signl = createSignal(a, -0.5, a_size); //allocates the memory
+    double complex* signl = createSignal(a, -0.5, a_size);
     
     if(signl == NULL) return 1;
     frequency_bin* notes = get_pitch(signl);
-    
     free(signl);
     
     if(notes == NULL) return 1;
     print_frequency_bins(notes, PEAKS_ARR_SIZE);
     free(notes);
+    
     return 0;
 
 }

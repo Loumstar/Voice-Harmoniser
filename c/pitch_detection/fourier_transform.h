@@ -7,13 +7,13 @@
 
 void print_complex_array(double complex complex_arr[], size_t s){
     for(size_t j = 0; j < s; j++){
-        printf("%f + i%f\n", creal(complex_arr[j]), cimag(complex_arr[j]));
+        printf("%.2f + i%.2f\n", creal(complex_arr[j]), cimag(complex_arr[j]));
     }
 }
 
 void print_magnitude(double complex complex_arr[], size_t s){
     for(size_t j = 0; j < s; j++){
-        printf("%lu Hz: %f\n", j, cabs(complex_arr[j]));
+        printf("%lu Hz: %.2f\n", j, cabs(complex_arr[j]));
     }
 }
 
@@ -25,8 +25,7 @@ double complex* signalCopy(double complex waveform[], size_t n){
     return copy;
 }
  
-void _fft(double complex waveform[], double complex spectrum[], size_t n, int step)
-{
+void _fft(double complex waveform[], double complex spectrum[], size_t n, size_t step){
 	if(step < n){
 		_fft(spectrum, waveform, n, step * 2);
 		_fft(spectrum + step, waveform + step, n, step * 2);
@@ -40,9 +39,9 @@ void _fft(double complex waveform[], double complex spectrum[], size_t n, int st
 	}
 }
 
-void fft(double complex waveform[], size_t length)
-{
+void fft(double complex waveform[], size_t length){
 	double complex* spectrum = signalCopy(waveform, length);
 	_fft(waveform, spectrum, length, 1);
+    
     free(spectrum);
 }
