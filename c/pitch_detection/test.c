@@ -1,4 +1,4 @@
-#include "./pitch_detection.c"
+#include "pitch_detection.h"
 
 #define SIGNAL_MALLOC_ERROR NAN + (I * NAN)
 

@@ -1,7 +1,7 @@
 #include <stdbool.h>
 #include "fourier_transform.h"
-#include "signal.h"
-#include "correlation_methods.h"
+#include "signal_methods.h"
+#include "peaks_correlation.h"
 
 #define THRESHOLD 3.0
 #define SAMPLE_ARR_SIZE (size_t) 75
