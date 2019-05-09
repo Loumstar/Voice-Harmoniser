@@ -1,7 +1,7 @@
 #include <complex.h>
 
 #define FRAME_RATE 44100
-#define BIT_DEPTH 1
+#define BIT_DEPTH 256
 
 #define CLIP_FRAMES (size_t) 4096 //must be a power of 2
 

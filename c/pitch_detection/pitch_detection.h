@@ -8,18 +8,22 @@
 #define SAMPLE_ARR_SIZE (size_t) 75
 #define PEAKS_ARR_SIZE (size_t) 20
 
-#define FLOAT_COMPARISON_ERROR (double) 0.01
+#define FLOAT_EPSILON (double) 0.01
 
-bool _bin_is_non_zero(double a){
-    return a > FLOAT_COMPARISON_ERROR;
+bool _is_non_zero(double a){
+    return a > FLOAT_EPSILON;
 }
 
 bool _is_maxima(double y0, double y1, double y2){
-    return (y1 - y0 > FLOAT_COMPARISON_ERROR) && (y1 - y2 > FLOAT_COMPARISON_ERROR);
+    return (y1 - y0 > FLOAT_EPSILON) && (y1 - y2 > FLOAT_EPSILON);
 }
 
 bool _is_above_threshold(double a, double noise){
-    return a / noise > THRESHOLD || noise < FLOAT_COMPARISON_ERROR;
+    return a / noise > THRESHOLD || noise < FLOAT_EPSILON;
+}
+
+double decibels(double v){
+    return 20 * log10f(v); //base voltage is one as the amplitude is scaled to between 0 and 1.
 }
 
 double get_noise_level(int f, double complex clip[]){
@@ -57,20 +61,19 @@ frequency_bin* get_peaks(double complex clip[]){
         return NULL;
     }
     
-    double noise, ampltde;
+    double noise, amplitude;
     size_t i = 0;
-    
     for(size_t f = 0; f < floor(CLIP_FRAMES / 2); f++){
         noise = get_noise_level(f, clip);
-        ampltde = cabs(clip[f]);
+        amplitude = cabs(clip[f]);
         if(
             i < PEAKS_ARR_SIZE
-            && _bin_is_non_zero(ampltde)
-            && _is_maxima(cabs(clip[f-1]), ampltde, cabs(clip[f+1]))
-            && _is_above_threshold(ampltde, noise)
+            && _is_non_zero(amplitude)
+            && _is_maxima(cabs(clip[f-1]), amplitude, cabs(clip[f+1]))
+            && _is_above_threshold(amplitude, noise)
         ){
             peaks[i][0] = (double) f;
-            peaks[i][1] = (double) ampltde * 2 / CLIP_FRAMES;
+            peaks[i][1] = (double) decibels(amplitude * 2 / CLIP_FRAMES);
             i++;
         }
     }
@@ -82,7 +85,7 @@ frequency_bin* get_pitch(double complex clip[]){
     frequency_bin* peaks = get_peaks(clip);
     
     if(peaks != NULL){
-        note_probabilities(peaks, PEAKS_ARR_SIZE, FLOAT_COMPARISON_ERROR);
+        note_probabilities(peaks, PEAKS_ARR_SIZE, FLOAT_EPSILON);
     }
 
     return peaks;

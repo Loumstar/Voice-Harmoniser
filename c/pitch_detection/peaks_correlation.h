@@ -7,6 +7,13 @@
 
 double* get_harmonics(double peak){
     double* harmonics = malloc(sizeof(double) * HARMONICS_ARR_SIZE);
+    if(harmonics == NULL){
+        printf(
+            "Malloc error at get_harmonics() method: failed while requesting %zu bytes.\n",
+            sizeof(double) * HARMONICS_ARR_SIZE
+        );
+        return NULL;
+    }
     for(size_t h = 0; h < HARMONICS_ARR_SIZE; h++){
         harmonics[h] = peak * (h + 1);
     }
@@ -29,16 +36,17 @@ double test_harmonics(frequency_bin peaks[], double harmonics[], size_t peaks_ar
     return (double) correlation / HARMONICS_ARR_SIZE;
 }
 
-void note_probabilities(frequency_bin peaks[], size_t peaks_arr_size, size_t float_comparison_error){    
+void note_probabilities(frequency_bin peaks[], size_t peaks_arr_size, size_t float_epsilon){    
     double probability;
     for(int p = 0; p < peaks_arr_size; p++){
-        if(peaks[p][1] > float_comparison_error){
+        if(peaks[p][1] < -1 * float_epsilon){
             double* harmonics = get_harmonics(peaks[p][0]);
+            
+            if(harmonics == NULL) break;
             probability = test_harmonics(peaks, harmonics, peaks_arr_size);
-
-            free(harmonics);
-
             peaks[p][2] = probability;
+            
+            free(harmonics);
         } else {
             peaks[p][2] = 0.0;
         }
