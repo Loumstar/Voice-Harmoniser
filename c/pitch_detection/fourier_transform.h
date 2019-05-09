@@ -26,22 +26,22 @@ double complex* signalCopy(double complex waveform[], size_t n){
 }
  
 void _fft(double complex waveform[], double complex spectrum[], size_t n, size_t step){
-	if(step < n){
-		_fft(spectrum, waveform, n, step * 2);
-		_fft(spectrum + step, waveform + step, n, step * 2);
-		
+    if(step < n){
+        _fft(spectrum, waveform, n, step * 2);
+        _fft(spectrum + step, waveform + step, n, step * 2);
+
         for (size_t a = 0; a < n; a += 2 * step){
-			double complex t = cexp(-I * PI * a / n) * spectrum[a + step];
-			
+            double complex t = cexp(-I * PI * a / n) * spectrum[a + step];
+
             waveform[a / 2] = spectrum[a] + t;
-			waveform[(a + n)/2] = spectrum[a] - t;
-		}
-	}
+            waveform[(a + n)/2] = spectrum[a] - t;
+        }
+    }
 }
 
 void fft(double complex waveform[], size_t length){
-	double complex* spectrum = signalCopy(waveform, length);
-	_fft(waveform, spectrum, length, 1);
-    
+    double complex* spectrum = signalCopy(waveform, length);
+    _fft(waveform, spectrum, length, 1);
+
     free(spectrum);
 }
