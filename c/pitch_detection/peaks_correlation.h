@@ -23,7 +23,9 @@ double* get_harmonics(double peak){
 double get_correlation(double f, frequency_bin peaks[], size_t peaks_arr_size){
     double c = 0;
     for(size_t s = 0; s < peaks_arr_size; s++){
-        c += pow(EULER, -1 * pow((2 * (f - peaks[s][0]) / DISTRIBUTION_SPACING), 2));
+        if(!isnan(peaks[s][0])){
+            c += pow(EULER, -1 * pow((2 * (f - peaks[s][0]) / DISTRIBUTION_SPACING), 2));
+        }
     }
     return c;
 }
@@ -39,7 +41,7 @@ double test_harmonics(frequency_bin peaks[], double harmonics[], size_t peaks_ar
 void note_probabilities(frequency_bin peaks[], size_t peaks_arr_size, size_t float_epsilon){    
     double probability;
     for(int p = 0; p < peaks_arr_size; p++){
-        if(peaks[p][1] < -1 * float_epsilon){
+        if(!isnan(peaks[p][0])){
             double* harmonics = get_harmonics(peaks[p][0]);
             
             if(harmonics == NULL) break;
@@ -47,8 +49,6 @@ void note_probabilities(frequency_bin peaks[], size_t peaks_arr_size, size_t flo
             peaks[p][2] = probability;
             
             free(harmonics);
-        } else {
-            peaks[p][2] = 0.0;
         }
     }
 }

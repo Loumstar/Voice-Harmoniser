@@ -77,6 +77,12 @@ frequency_bin* get_peaks(double complex clip[]){
             i++;
         }
     }
+    while(i < PEAKS_ARR_SIZE){ //initialises unused positions in peaks[] to a a standard form.
+        peaks[i][0] = NAN;
+        peaks[i][1] = -1 * INFINITY;
+        peaks[i][2] = NAN;
+        i++;
+    }
     return peaks;
 }
 
