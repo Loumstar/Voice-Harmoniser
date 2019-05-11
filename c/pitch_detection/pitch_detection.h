@@ -5,10 +5,12 @@
 
 #define THRESHOLD 3.0
 
-#define SAMPLE_ARR_SIZE (size_t) 75
-#define PEAKS_ARR_SIZE (size_t) 20
+#define SAMPLE_ARR_SIZE 75
+#define PEAKS_ARR_SIZE 20
 
-#define FLOAT_EPSILON (double) 0.01
+//The smallest acceptable value for a floating point that is considered
+//to be greater than zero.
+#define FLOAT_EPSILON 0.01
 
 bool _is_non_zero(double a){
     return a > FLOAT_EPSILON;
@@ -23,10 +25,21 @@ bool _is_above_threshold(double a, double noise){
 }
 
 double decibels(double v){
-    return 20 * log10f(v); //base voltage is one as the amplitude is scaled to between 0 and 1.
+    //base voltage is one as the amplitude is scaled to between 0 and 1.
+    return 20 * log10f(v);
 }
 
 double get_noise_level(int f, double complex clip[]){
+    /*
+    Method to determine the amplitude of frequencies surrounding f, known as the 'noise'.
+    This aids in determining whether f is a peak as if its amplitude is significantly 
+    larger, the ratio of its ampltiude to noise will be larger than the threshold, which
+    will add it to the peaks array.
+
+    This is done by summing the amplitudes that fall within the sample surrounding f,
+    and is dviding by the sample array size.
+
+    */
     double sum = 0;
     size_t lb, ub;
     if(f + floor(SAMPLE_ARR_SIZE / 2) > CLIP_FRAMES){
@@ -55,7 +68,7 @@ frequency_bin* get_peaks(double complex clip[]){
     frequency_bin* peaks = malloc(FREQUENCY_BIN_SIZE * PEAKS_ARR_SIZE);
     if(peaks == NULL){
         printf(
-            "Malloc error at get_peaks() method: failed while requesting %zu bytes.\n",
+            "Malloc error at get_peaks() method: failed to allocate %zu bytes.\n",
             FREQUENCY_BIN_SIZE * PEAKS_ARR_SIZE
         );
         return NULL;
@@ -72,7 +85,7 @@ frequency_bin* get_peaks(double complex clip[]){
             && _is_maxima(cabs(clip[f-1]), amplitude, cabs(clip[f+1]))
             && _is_above_threshold(amplitude, noise)
         ){
-            peaks[i][0] = (double) f;
+            peaks[i][0] = (double) f * FRAME_RATE / CLIP_FRAMES;
             peaks[i][1] = (double) decibels(amplitude * 2 / CLIP_FRAMES);
             i++;
         }
