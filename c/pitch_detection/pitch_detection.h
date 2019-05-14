@@ -3,13 +3,18 @@
 #include "signal_methods.h"
 #include "peaks_correlation.h"
 
+/*
+The minimum ratio of the amplitude of a frequency, relative
+to that of similar frequencies, which would add it to the list of peaks.
+*/
 #define THRESHOLD 3.0
 
+//The size of the array used to calculate the average amplitude of frequencies
 #define SAMPLE_ARR_SIZE 75
+//The size of the array containing frequencies identified as peaks.
 #define PEAKS_ARR_SIZE 20
 
-//The smallest acceptable value for a floating point that is considered
-//to be greater than zero.
+//The smallest value for a floating point that is considered to be greater than zero.
 #define FLOAT_EPSILON 0.01
 
 bool _is_non_zero(double a){
