@@ -36,30 +36,48 @@ double decibels(double v){
 
 double get_noise_level(int f, double complex clip[]){
     /*
-    Method to determine the amplitude of frequencies surrounding f, known as the 'noise'.
-    This aids in determining whether f is a peak as if its amplitude is significantly 
-    larger, the ratio of its ampltiude to noise will be larger than the threshold, which
-    will add it to the peaks array.
+    Method to determine the amplitude of frequencies surrounding the amplitude at f, or 'noise'.
+    
+    If the amplitude at f is significantly larger than the noise, the ratio of the two
+    will be larger than the threshold.
 
-    This is done by summing the amplitudes that fall within the sample surrounding f,
-    and is dviding by the sample array size.
+    If the amplitude passes the threshold test, it is added to the array of peaks.
 
+    The noise is calculated by summing the amplitudes that are within the set of frequencies 
+    surrounding f, and is divided by the number of amplitudes in the set.
+
+    The size of this set is determined by SAMPLE_ARR_SIZE.
+
+    PARAMETERS
+    ----------
+    f:
+    The index value of the frequency that is being tested.
+
+    clip:
+    The array containing the amplitudes of all frequencies.
     */
     double sum = 0;
     size_t lb, ub;
+    //If the sample indices fall outside the upper bound of clip
     if(f + floor(SAMPLE_ARR_SIZE / 2) > CLIP_FRAMES){
+        //use the last set of values that make a full set.
         lb = CLIP_FRAMES - SAMPLE_ARR_SIZE;
         ub = CLIP_FRAMES;
+    //If the sample indices fall outside the upper bound of clip 
     } else if(f - floor(SAMPLE_ARR_SIZE / 2) < 0){
+        //use the first set of values that make a full set.
         lb = 0;
         ub = SAMPLE_ARR_SIZE;
     } else {
+        //else use a set where f is the middle value.
         lb = f - floor(SAMPLE_ARR_SIZE / 2);
         ub = f + floor(SAMPLE_ARR_SIZE / 2);
     }
     for(size_t i = lb; i < ub; i++){
+        //sum the values
         sum += cabs(clip[i]);
     }
+    //divide by the size of the sample.
     return (double) sum / SAMPLE_ARR_SIZE;
 }
 
@@ -72,10 +90,8 @@ void _convert_to_frequency_domain(double complex clip[]){
 frequency_bin* get_peaks(double complex clip[]){
     frequency_bin* peaks = malloc(FREQUENCY_BIN_SIZE * PEAKS_ARR_SIZE);
     if(peaks == NULL){
-        printf(
-            "Malloc error at get_peaks() method: failed to allocate %zu bytes.\n",
-            FREQUENCY_BIN_SIZE * PEAKS_ARR_SIZE
-        );
+        
+        print_malloc_error(__func__, FREQUENCY_BIN_SIZE * PEAKS_ARR_SIZE);
         return NULL;
     }
     

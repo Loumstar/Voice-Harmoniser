@@ -8,3 +8,11 @@ void print_frequency_bins(frequency_bin bin[], size_t peaks_arr_size){
         }
     }
 }
+
+void print_malloc_error(const char* function_name, size_t malloc_size){
+    printf(
+            "Malloc error at %s method: failed to allocate %zu bytes.\n",
+            function_name,
+            malloc_size
+        );
+}

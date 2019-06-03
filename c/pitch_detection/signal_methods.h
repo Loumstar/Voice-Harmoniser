@@ -5,7 +5,7 @@
 //The number of values each frame can take tp describe the waveform.
 #define BIT_DEPTH 256
 //The number of frames in a clip. Must be a power of two.
-#define CLIP_FRAMES pow(2, 12)
+#define CLIP_FRAMES (int) pow(2, 12)
 
 double mean(double complex arr[], size_t length){
     double sum = 0;

@@ -27,10 +27,7 @@ double complex* create_signal(double complex a[], double offset, size_t length){
     double complex* signl = malloc(sizeof(double complex) * CLIP_FRAMES);
     //Handle memeory allocation error.
     if(signl == NULL){
-        printf(
-            "Malloc error during create_signal() method: failed to allocate %zu bytes.", 
-            sizeof(double complex) * CLIP_FRAMES
-        );
+        print_malloc_error(__func__, sizeof(double complex) * CLIP_FRAMES);
         return NULL;
     }
     //For each frame in the signal

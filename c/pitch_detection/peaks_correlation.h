@@ -8,10 +8,7 @@
 double* get_harmonics(double peak){
     double* harmonics = malloc(sizeof(double) * HARMONICS_ARR_SIZE);
     if(harmonics == NULL){
-        printf(
-            "Malloc error at get_harmonics() method: failed to allocate %zu bytes.\n",
-            sizeof(double) * HARMONICS_ARR_SIZE
-        );
+        print_malloc_error(__func__, sizeof(double) * HARMONICS_ARR_SIZE);
         return NULL;
     }
     for(size_t h = 0; h < HARMONICS_ARR_SIZE; h++){
