@@ -1,0 +1,547 @@
+[
+    {
+        "frequency": "4186.009",
+        "notes": [
+            "C8"
+        ]
+    },
+    {
+        "frequency": "3951.066",
+        "notes": [
+            "B7"
+        ]
+    },
+    {
+        "frequency": "3729.310",
+        "notes": [
+            "A#7",
+            "Bb7"
+        ]
+    },
+    {
+        "frequency": "3520.000",
+        "notes": [
+            "A7"
+        ]
+    },
+    {
+        "frequency": "3322.438",
+        "notes": [
+            "G#7",
+            "Ab7"
+        ]
+    },
+    {
+        "frequency": "3135.963",
+        "notes": [
+            "G7"
+        ]
+    },
+    {
+        "frequency": "2959.955",
+        "notes": [
+            "F#7",
+            "Gb7"
+        ]
+    },
+    {
+        "frequency": "2793.826",
+        "notes": [
+            "F7"
+        ]
+    },
+    {
+        "frequency": "2637.020",
+        "notes": [
+            "E7"
+        ]
+    },
+    {
+        "frequency": "2489.016",
+        "notes": [
+            "D#7",
+            "Eb7"
+        ]
+    },
+    {
+        "frequency": "2349.318",
+        "notes": [
+            "D7"
+        ]
+    },
+    {
+        "frequency": "2217.461",
+        "notes": [
+            "C#7",
+            "Db7"
+        ]
+    },
+    {
+        "frequency": "2093.005",
+        "notes": [
+            "C7"
+        ]
+    },
+    {
+        "frequency": "1975.533",
+        "notes": [
+            "B6"
+        ]
+    },
+    {
+        "frequency": "1864.655",
+        "notes": [
+            "A#6",
+            "Bb6"
+        ]
+    },
+    {
+        "frequency": "1760.000",
+        "notes": [
+            "A6"
+        ]
+    },
+    {
+        "frequency": "1661.219",
+        "notes": [
+            "G#6",
+            "Ab6"
+        ]
+    },
+    {
+        "frequency": "1567.982",
+        "notes": [
+            "G6"
+        ]
+    },
+    {
+        "frequency": "1479.978",
+        "notes": [
+            "F#6",
+            "Gb6"
+        ]
+    },
+    {
+        "frequency": "1396.913",
+        "notes": [
+            "F6"
+        ]
+    },
+    {
+        "frequency": "1318.510",
+        "notes": [
+            "E6"
+        ]
+    },
+    {
+        "frequency": "1244.508",
+        "notes": [
+            "D#6",
+            "Eb6"
+        ]
+    },
+    {
+        "frequency": "1174.659",
+        "notes": [
+            "D6"
+        ]
+    },
+    {
+        "frequency": "1108.731",
+        "notes": [
+            "C#6",
+            "Db6"
+        ]
+    },
+    {
+        "frequency": "1046.502",
+        "notes": [
+            "C6"
+        ]
+    },
+    {
+        "frequency": "987.7666",
+        "notes": [
+            "B5"
+        ]
+    },
+    {
+        "frequency": "932.3275",
+        "notes": [
+            "A#5",
+            "Bb5"
+        ]
+    },
+    {
+        "frequency": "880.0000",
+        "notes": [
+            "A5"
+        ]
+    },
+    {
+        "frequency": "830.6094",
+        "notes": [
+            "G#5",
+            "Ab5"
+        ]
+    },
+    {
+        "frequency": "783.9909",
+        "notes": [
+            "G5"
+        ]
+    },
+    {
+        "frequency": "739.9888",
+        "notes": [
+            "F#5",
+            "Gb5"
+        ]
+    },
+    {
+        "frequency": "698.4565",
+        "notes": [
+            "F5"
+        ]
+    },
+    {
+        "frequency": "659.2551",
+        "notes": [
+            "E5"
+        ]
+    },
+    {
+        "frequency": "622.2540",
+        "notes": [
+            "D#5",
+            "Eb5"
+        ]
+    },
+    {
+        "frequency": "587.3295",
+        "notes": [
+            "D5"
+        ]
+    },
+    {
+        "frequency": "554.3653",
+        "notes": [
+            "C#5",
+            "Db5"
+        ]
+    },
+    {
+        "frequency": "523.2511",
+        "notes": [
+            "C5"
+        ]
+    },
+    {
+        "frequency": "493.8833",
+        "notes": [
+            "B4"
+        ]
+    },
+    {
+        "frequency": "466.1638",
+        "notes": [
+            "A#4",
+            "Bb4"
+        ]
+    },
+    {
+        "frequency": "440.0000",
+        "notes": [
+            "A440"
+        ]
+    },
+    {
+        "frequency": "415.3047",
+        "notes": [
+            "G#4",
+            "Ab4"
+        ]
+    },
+    {
+        "frequency": "391.9954",
+        "notes": [
+            "G4"
+        ]
+    },
+    {
+        "frequency": "369.9944",
+        "notes": [
+            "F#4",
+            "Gb4"
+        ]
+    },
+    {
+        "frequency": "349.2282",
+        "notes": [
+            "F4"
+        ]
+    },
+    {
+        "frequency": "329.6276",
+        "notes": [
+            "E4"
+        ]
+    },
+    {
+        "frequency": "311.1270",
+        "notes": [
+            "D#4",
+            "Eb4"
+        ]
+    },
+    {
+        "frequency": "293.6648",
+        "notes": [
+            "D4"
+        ]
+    },
+    {
+        "frequency": "277.1826",
+        "notes": [
+            "C#4",
+            "Db4"
+        ]
+    },
+    {
+        "frequency": "261.6256",
+        "notes": [
+            "C4"
+        ]
+    },
+    {
+        "frequency": "246.9417",
+        "notes": [
+            "B3"
+        ]
+    },
+    {
+        "frequency": "233.0819",
+        "notes": [
+            "A#3",
+            "Bb3"
+        ]
+    },
+    {
+        "frequency": "220.0000",
+        "notes": [
+            "A3"
+        ]
+    },
+    {
+        "frequency": "207.6523",
+        "notes": [
+            "G#3",
+            "Ab3"
+        ]
+    },
+    {
+        "frequency": "195.9977",
+        "notes": [
+            "G3"
+        ]
+    },
+    {
+        "frequency": "184.9972",
+        "notes": [
+            "F#3",
+            "Gb3"
+        ]
+    },
+    {
+        "frequency": "174.6141",
+        "notes": [
+            "F3"
+        ]
+    },
+    {
+        "frequency": "164.8138",
+        "notes": [
+            "E3"
+        ]
+    },
+    {
+        "frequency": "155.5635",
+        "notes": [
+            "D#3",
+            "Eb3"
+        ]
+    },
+    {
+        "frequency": "146.8324",
+        "notes": [
+            "D3"
+        ]
+    },
+    {
+        "frequency": "138.5913",
+        "notes": [
+            "C#3",
+            "Db3"
+        ]
+    },
+    {
+        "frequency": "130.8128",
+        "notes": [
+            "C3"
+        ]
+    },
+    {
+        "frequency": "123.4708",
+        "notes": [
+            "B2"
+        ]
+    },
+    {
+        "frequency": "116.5409",
+        "notes": [
+            "A#2",
+            "Bb2"
+        ]
+    },
+    {
+        "frequency": "110.0000",
+        "notes": [
+            "A2"
+        ]
+    },
+    {
+        "frequency": "103.8262",
+        "notes": [
+            "G#2",
+            "Ab2"
+        ]
+    },
+    {
+        "frequency": "97.99886",
+        "notes": [
+            "G2"
+        ]
+    },
+    {
+        "frequency": "92.49861",
+        "notes": [
+            "F#2",
+            "Gb2"
+        ]
+    },
+    {
+        "frequency": "87.30706",
+        "notes": [
+            "F2"
+        ]
+    },
+    {
+        "frequency": "82.40689",
+        "notes": [
+            "E2"
+        ]
+    },
+    {
+        "frequency": "77.78175",
+        "notes": [
+            "D#2",
+            "Eb2"
+        ]
+    },
+    {
+        "frequency": "73.41619",
+        "notes": [
+            "D2"
+        ]
+    },
+    {
+        "frequency": "69.29566",
+        "notes": [
+            "C#2",
+            "Db2"
+        ]
+    },
+    {
+        "frequency": "65.40639",
+        "notes": [
+            "C2"
+        ]
+    },
+    {
+        "frequency": "61.73541",
+        "notes": [
+            "B1"
+        ]
+    },
+    {
+        "frequency": "58.27047",
+        "notes": [
+            "A#1",
+            "Bb1"
+        ]
+    },
+    {
+        "frequency": "55.00000",
+        "notes": [
+            "A1"
+        ]
+    },
+    {
+        "frequency": "51.91309",
+        "notes": [
+            "G#1",
+            "Ab1"
+        ]
+    },
+    {
+        "frequency": "48.99943",
+        "notes": [
+            "G1"
+        ]
+    },
+    {
+        "frequency": "46.24930",
+        "notes": [
+            "F#1",
+            "Gb1"
+        ]
+    },
+    {
+        "frequency": "43.65353",
+        "notes": [
+            "F1"
+        ]
+    },
+    {
+        "frequency": "41.20344",
+        "notes": [
+            "E1"
+        ]
+    },
+    {
+        "frequency": "38.89087",
+        "notes": [
+            "D#1",
+            "Eb1"
+        ]
+    },
+    {
+        "frequency": "36.70810",
+        "notes": [
+            "D1"
+        ]
+    },
+    {
+        "frequency": "34.64783",
+        "notes": [
+            "C#1",
+            "Db1"
+        ]
+    },
+    {
+        "frequency": "32.70320",
+        "notes": [
+            "C1"
+        ]
+    }
+]
