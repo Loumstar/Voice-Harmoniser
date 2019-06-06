@@ -1,547 +1,970 @@
 [
     {
+        "bounds": {
+            "lb": 4068.5375
+        },
         "frequency": "4186.009",
         "notes": [
             "C8"
-        ]
+        ],
+        "number": 88
     },
     {
+        "bounds": {
+            "lb": 3840.188,
+            "ub": 4068.5375
+        },
         "frequency": "3951.066",
         "notes": [
             "B7"
-        ]
+        ],
+        "number": 87
     },
     {
+        "bounds": {
+            "lb": 3624.655,
+            "ub": 3840.188
+        },
         "frequency": "3729.310",
         "notes": [
             "A#7",
             "Bb7"
-        ]
+        ],
+        "number": 86
     },
     {
+        "bounds": {
+            "lb": 3421.219,
+            "ub": 3624.655
+        },
         "frequency": "3520.000",
         "notes": [
             "A7"
-        ]
+        ],
+        "number": 85
     },
     {
+        "bounds": {
+            "lb": 3229.2005,
+            "ub": 3421.219
+        },
         "frequency": "3322.438",
         "notes": [
             "G#7",
             "Ab7"
-        ]
+        ],
+        "number": 84
     },
     {
+        "bounds": {
+            "lb": 3047.959,
+            "ub": 3229.2005
+        },
         "frequency": "3135.963",
         "notes": [
             "G7"
-        ]
+        ],
+        "number": 83
     },
     {
+        "bounds": {
+            "lb": 2876.8905,
+            "ub": 3047.959
+        },
         "frequency": "2959.955",
         "notes": [
             "F#7",
             "Gb7"
-        ]
+        ],
+        "number": 82
     },
     {
+        "bounds": {
+            "lb": 2715.423,
+            "ub": 2876.8905
+        },
         "frequency": "2793.826",
         "notes": [
             "F7"
-        ]
+        ],
+        "number": 81
     },
     {
+        "bounds": {
+            "lb": 2563.018,
+            "ub": 2715.423
+        },
         "frequency": "2637.020",
         "notes": [
             "E7"
-        ]
+        ],
+        "number": 80
     },
     {
+        "bounds": {
+            "lb": 2419.167,
+            "ub": 2563.018
+        },
         "frequency": "2489.016",
         "notes": [
             "D#7",
             "Eb7"
-        ]
+        ],
+        "number": 79
     },
     {
+        "bounds": {
+            "lb": 2283.3895,
+            "ub": 2419.167
+        },
         "frequency": "2349.318",
         "notes": [
             "D7"
-        ]
+        ],
+        "number": 78
     },
     {
+        "bounds": {
+            "lb": 2155.233,
+            "ub": 2283.3895
+        },
         "frequency": "2217.461",
         "notes": [
             "C#7",
             "Db7"
-        ]
+        ],
+        "number": 77
     },
     {
+        "bounds": {
+            "lb": 2034.269,
+            "ub": 2155.233
+        },
         "frequency": "2093.005",
         "notes": [
             "C7"
-        ]
+        ],
+        "number": 76
     },
     {
+        "bounds": {
+            "lb": 1920.094,
+            "ub": 2034.269
+        },
         "frequency": "1975.533",
         "notes": [
             "B6"
-        ]
+        ],
+        "number": 75
     },
     {
+        "bounds": {
+            "lb": 1812.3275,
+            "ub": 1920.094
+        },
         "frequency": "1864.655",
         "notes": [
             "A#6",
             "Bb6"
-        ]
+        ],
+        "number": 74
     },
     {
+        "bounds": {
+            "lb": 1710.6095,
+            "ub": 1812.3275
+        },
         "frequency": "1760.000",
         "notes": [
             "A6"
-        ]
+        ],
+        "number": 73
     },
     {
+        "bounds": {
+            "lb": 1614.6005,
+            "ub": 1710.6095
+        },
         "frequency": "1661.219",
         "notes": [
             "G#6",
             "Ab6"
-        ]
+        ],
+        "number": 72
     },
     {
+        "bounds": {
+            "lb": 1523.98,
+            "ub": 1614.6005
+        },
         "frequency": "1567.982",
         "notes": [
             "G6"
-        ]
+        ],
+        "number": 71
     },
     {
+        "bounds": {
+            "lb": 1438.4455,
+            "ub": 1523.98
+        },
         "frequency": "1479.978",
         "notes": [
             "F#6",
             "Gb6"
-        ]
+        ],
+        "number": 70
     },
     {
+        "bounds": {
+            "lb": 1357.7115,
+            "ub": 1438.4455
+        },
         "frequency": "1396.913",
         "notes": [
             "F6"
-        ]
+        ],
+        "number": 69
     },
     {
+        "bounds": {
+            "lb": 1281.509,
+            "ub": 1357.7115
+        },
         "frequency": "1318.510",
         "notes": [
             "E6"
-        ]
+        ],
+        "number": 68
     },
     {
+        "bounds": {
+            "lb": 1209.5835,
+            "ub": 1281.509
+        },
         "frequency": "1244.508",
         "notes": [
             "D#6",
             "Eb6"
-        ]
+        ],
+        "number": 67
     },
     {
+        "bounds": {
+            "lb": 1141.695,
+            "ub": 1209.5835
+        },
         "frequency": "1174.659",
         "notes": [
             "D6"
-        ]
+        ],
+        "number": 66
     },
     {
+        "bounds": {
+            "lb": 1077.6165,
+            "ub": 1141.695
+        },
         "frequency": "1108.731",
         "notes": [
             "C#6",
             "Db6"
-        ]
+        ],
+        "number": 65
     },
     {
+        "bounds": {
+            "lb": 1017.1343,
+            "ub": 1077.6165
+        },
         "frequency": "1046.502",
         "notes": [
             "C6"
-        ]
+        ],
+        "number": 64
     },
     {
+        "bounds": {
+            "lb": 960.04705,
+            "ub": 1017.1343
+        },
         "frequency": "987.7666",
         "notes": [
             "B5"
-        ]
+        ],
+        "number": 63
     },
     {
+        "bounds": {
+            "lb": 906.16375,
+            "ub": 960.04705
+        },
         "frequency": "932.3275",
         "notes": [
             "A#5",
             "Bb5"
-        ]
+        ],
+        "number": 62
     },
     {
+        "bounds": {
+            "lb": 855.3047,
+            "ub": 906.16375
+        },
         "frequency": "880.0000",
         "notes": [
             "A5"
-        ]
+        ],
+        "number": 61
     },
     {
+        "bounds": {
+            "lb": 807.30015,
+            "ub": 855.3047
+        },
         "frequency": "830.6094",
         "notes": [
             "G#5",
             "Ab5"
-        ]
+        ],
+        "number": 60
     },
     {
+        "bounds": {
+            "lb": 761.98985,
+            "ub": 807.30015
+        },
         "frequency": "783.9909",
         "notes": [
             "G5"
-        ]
+        ],
+        "number": 59
     },
     {
+        "bounds": {
+            "lb": 719.22265,
+            "ub": 761.98985
+        },
         "frequency": "739.9888",
         "notes": [
             "F#5",
             "Gb5"
-        ]
+        ],
+        "number": 58
     },
     {
+        "bounds": {
+            "lb": 678.8558,
+            "ub": 719.22265
+        },
         "frequency": "698.4565",
         "notes": [
             "F5"
-        ]
+        ],
+        "number": 57
     },
     {
+        "bounds": {
+            "lb": 640.75455,
+            "ub": 678.8558
+        },
         "frequency": "659.2551",
         "notes": [
             "E5"
-        ]
+        ],
+        "number": 56
     },
     {
+        "bounds": {
+            "lb": 604.79175,
+            "ub": 640.75455
+        },
         "frequency": "622.2540",
         "notes": [
             "D#5",
             "Eb5"
-        ]
+        ],
+        "number": 55
     },
     {
+        "bounds": {
+            "lb": 570.8474,
+            "ub": 604.79175
+        },
         "frequency": "587.3295",
         "notes": [
             "D5"
-        ]
+        ],
+        "number": 54
     },
     {
+        "bounds": {
+            "lb": 538.8082,
+            "ub": 570.8474
+        },
         "frequency": "554.3653",
         "notes": [
             "C#5",
             "Db5"
-        ]
+        ],
+        "number": 53
     },
     {
+        "bounds": {
+            "lb": 508.5672,
+            "ub": 538.8082
+        },
         "frequency": "523.2511",
         "notes": [
             "C5"
-        ]
+        ],
+        "number": 52
     },
     {
+        "bounds": {
+            "lb": 480.02355,
+            "ub": 508.5672
+        },
         "frequency": "493.8833",
         "notes": [
             "B4"
-        ]
+        ],
+        "number": 51
     },
     {
+        "bounds": {
+            "lb": 453.0819,
+            "ub": 480.02355
+        },
         "frequency": "466.1638",
         "notes": [
             "A#4",
             "Bb4"
-        ]
+        ],
+        "number": 50
     },
     {
+        "bounds": {
+            "lb": 427.65235,
+            "ub": 453.0819
+        },
         "frequency": "440.0000",
         "notes": [
             "A440"
-        ]
+        ],
+        "number": 49
     },
     {
+        "bounds": {
+            "lb": 403.65005,
+            "ub": 427.65235
+        },
         "frequency": "415.3047",
         "notes": [
             "G#4",
             "Ab4"
-        ]
+        ],
+        "number": 48
     },
     {
+        "bounds": {
+            "lb": 380.9949,
+            "ub": 403.65005
+        },
         "frequency": "391.9954",
         "notes": [
             "G4"
-        ]
+        ],
+        "number": 47
     },
     {
+        "bounds": {
+            "lb": 359.6113,
+            "ub": 380.9949
+        },
         "frequency": "369.9944",
         "notes": [
             "F#4",
             "Gb4"
-        ]
+        ],
+        "number": 46
     },
     {
+        "bounds": {
+            "lb": 339.4279,
+            "ub": 359.6113
+        },
         "frequency": "349.2282",
         "notes": [
             "F4"
-        ]
+        ],
+        "number": 45
     },
     {
+        "bounds": {
+            "lb": 320.3773,
+            "ub": 339.4279
+        },
         "frequency": "329.6276",
         "notes": [
             "E4"
-        ]
+        ],
+        "number": 44
     },
     {
+        "bounds": {
+            "lb": 302.3959,
+            "ub": 320.3773
+        },
         "frequency": "311.1270",
         "notes": [
             "D#4",
             "Eb4"
-        ]
+        ],
+        "number": 43
     },
     {
+        "bounds": {
+            "lb": 285.4237,
+            "ub": 302.3959
+        },
         "frequency": "293.6648",
         "notes": [
             "D4"
-        ]
+        ],
+        "number": 42
     },
     {
+        "bounds": {
+            "lb": 269.4041,
+            "ub": 285.4237
+        },
         "frequency": "277.1826",
         "notes": [
             "C#4",
             "Db4"
-        ]
+        ],
+        "number": 41
     },
     {
+        "bounds": {
+            "lb": 254.28365,
+            "ub": 269.4041
+        },
         "frequency": "261.6256",
         "notes": [
             "C4"
-        ]
+        ],
+        "number": 40
     },
     {
+        "bounds": {
+            "lb": 240.0118,
+            "ub": 254.28365
+        },
         "frequency": "246.9417",
         "notes": [
             "B3"
-        ]
+        ],
+        "number": 39
     },
     {
+        "bounds": {
+            "lb": 226.54095,
+            "ub": 240.0118
+        },
         "frequency": "233.0819",
         "notes": [
             "A#3",
             "Bb3"
-        ]
+        ],
+        "number": 38
     },
     {
+        "bounds": {
+            "lb": 213.82615,
+            "ub": 226.54095
+        },
         "frequency": "220.0000",
         "notes": [
             "A3"
-        ]
+        ],
+        "number": 37
     },
     {
+        "bounds": {
+            "lb": 201.825,
+            "ub": 213.82615
+        },
         "frequency": "207.6523",
         "notes": [
             "G#3",
             "Ab3"
-        ]
+        ],
+        "number": 36
     },
     {
+        "bounds": {
+            "lb": 190.49745,
+            "ub": 201.825
+        },
         "frequency": "195.9977",
         "notes": [
             "G3"
-        ]
+        ],
+        "number": 35
     },
     {
+        "bounds": {
+            "lb": 179.80565,
+            "ub": 190.49745
+        },
         "frequency": "184.9972",
         "notes": [
             "F#3",
             "Gb3"
-        ]
+        ],
+        "number": 34
     },
     {
+        "bounds": {
+            "lb": 169.71395,
+            "ub": 179.80565
+        },
         "frequency": "174.6141",
         "notes": [
             "F3"
-        ]
+        ],
+        "number": 33
     },
     {
+        "bounds": {
+            "lb": 160.18865,
+            "ub": 169.71395
+        },
         "frequency": "164.8138",
         "notes": [
             "E3"
-        ]
+        ],
+        "number": 32
     },
     {
+        "bounds": {
+            "lb": 151.19795,
+            "ub": 160.18865
+        },
         "frequency": "155.5635",
         "notes": [
             "D#3",
             "Eb3"
-        ]
+        ],
+        "number": 31
     },
     {
+        "bounds": {
+            "lb": 142.71185,
+            "ub": 151.19795
+        },
         "frequency": "146.8324",
         "notes": [
             "D3"
-        ]
+        ],
+        "number": 30
     },
     {
+        "bounds": {
+            "lb": 134.70205,
+            "ub": 142.71185
+        },
         "frequency": "138.5913",
         "notes": [
             "C#3",
             "Db3"
-        ]
+        ],
+        "number": 29
     },
     {
+        "bounds": {
+            "lb": 127.1418,
+            "ub": 134.70205
+        },
         "frequency": "130.8128",
         "notes": [
             "C3"
-        ]
+        ],
+        "number": 28
     },
     {
+        "bounds": {
+            "lb": 120.00585,
+            "ub": 127.1418
+        },
         "frequency": "123.4708",
         "notes": [
             "B2"
-        ]
+        ],
+        "number": 27
     },
     {
+        "bounds": {
+            "lb": 113.27045,
+            "ub": 120.00585
+        },
         "frequency": "116.5409",
         "notes": [
             "A#2",
             "Bb2"
-        ]
+        ],
+        "number": 26
     },
     {
+        "bounds": {
+            "lb": 106.9131,
+            "ub": 113.27045
+        },
         "frequency": "110.0000",
         "notes": [
             "A2"
-        ]
+        ],
+        "number": 25
     },
     {
+        "bounds": {
+            "lb": 100.91253,
+            "ub": 106.9131
+        },
         "frequency": "103.8262",
         "notes": [
             "G#2",
             "Ab2"
-        ]
+        ],
+        "number": 24
     },
     {
+        "bounds": {
+            "lb": 95.248735,
+            "ub": 100.91253
+        },
         "frequency": "97.99886",
         "notes": [
             "G2"
-        ]
+        ],
+        "number": 23
     },
     {
+        "bounds": {
+            "lb": 89.902835,
+            "ub": 95.248735
+        },
         "frequency": "92.49861",
         "notes": [
             "F#2",
             "Gb2"
-        ]
+        ],
+        "number": 22
     },
     {
+        "bounds": {
+            "lb": 84.856975,
+            "ub": 89.902835
+        },
         "frequency": "87.30706",
         "notes": [
             "F2"
-        ]
+        ],
+        "number": 21
     },
     {
+        "bounds": {
+            "lb": 80.09432,
+            "ub": 84.856975
+        },
         "frequency": "82.40689",
         "notes": [
             "E2"
-        ]
+        ],
+        "number": 20
     },
     {
+        "bounds": {
+            "lb": 75.59897,
+            "ub": 80.09432
+        },
         "frequency": "77.78175",
         "notes": [
             "D#2",
             "Eb2"
-        ]
+        ],
+        "number": 19
     },
     {
+        "bounds": {
+            "lb": 71.355925,
+            "ub": 75.59897
+        },
         "frequency": "73.41619",
         "notes": [
             "D2"
-        ]
+        ],
+        "number": 18
     },
     {
+        "bounds": {
+            "lb": 67.351025,
+            "ub": 71.355925
+        },
         "frequency": "69.29566",
         "notes": [
             "C#2",
             "Db2"
-        ]
+        ],
+        "number": 17
     },
     {
+        "bounds": {
+            "lb": 63.5709,
+            "ub": 67.351025
+        },
         "frequency": "65.40639",
         "notes": [
             "C2"
-        ]
+        ],
+        "number": 16
     },
     {
+        "bounds": {
+            "lb": 60.00294,
+            "ub": 63.5709
+        },
         "frequency": "61.73541",
         "notes": [
             "B1"
-        ]
+        ],
+        "number": 15
     },
     {
+        "bounds": {
+            "lb": 56.635235,
+            "ub": 60.00294
+        },
         "frequency": "58.27047",
         "notes": [
             "A#1",
             "Bb1"
-        ]
+        ],
+        "number": 14
     },
     {
+        "bounds": {
+            "lb": 53.456545,
+            "ub": 56.635235
+        },
         "frequency": "55.00000",
         "notes": [
             "A1"
-        ]
+        ],
+        "number": 13
     },
     {
+        "bounds": {
+            "lb": 50.45626,
+            "ub": 53.456545
+        },
         "frequency": "51.91309",
         "notes": [
             "G#1",
             "Ab1"
-        ]
+        ],
+        "number": 12
     },
     {
+        "bounds": {
+            "lb": 47.624365,
+            "ub": 50.45626
+        },
         "frequency": "48.99943",
         "notes": [
             "G1"
-        ]
+        ],
+        "number": 11
     },
     {
+        "bounds": {
+            "lb": 44.951415,
+            "ub": 47.624365
+        },
         "frequency": "46.24930",
         "notes": [
             "F#1",
             "Gb1"
-        ]
+        ],
+        "number": 10
     },
     {
+        "bounds": {
+            "lb": 42.428485,
+            "ub": 44.951415
+        },
         "frequency": "43.65353",
         "notes": [
             "F1"
-        ]
+        ],
+        "number": 9
     },
     {
+        "bounds": {
+            "lb": 40.047155,
+            "ub": 42.428485
+        },
         "frequency": "41.20344",
         "notes": [
             "E1"
-        ]
+        ],
+        "number": 8
     },
     {
+        "bounds": {
+            "lb": 37.799485,
+            "ub": 40.047155
+        },
         "frequency": "38.89087",
         "notes": [
             "D#1",
             "Eb1"
-        ]
+        ],
+        "number": 7
     },
     {
+        "bounds": {
+            "lb": 35.677965,
+            "ub": 37.799485
+        },
         "frequency": "36.70810",
         "notes": [
             "D1"
-        ]
+        ],
+        "number": 6
     },
     {
+        "bounds": {
+            "lb": 33.675515,
+            "ub": 35.677965
+        },
         "frequency": "34.64783",
         "notes": [
             "C#1",
             "Db1"
-        ]
+        ],
+        "number": 5
     },
     {
+        "bounds": {
+            "ub": 33.675515
+        },
         "frequency": "32.70320",
         "notes": [
             "C1"
-        ]
+        ],
+        "number": 4
     }
 ]
