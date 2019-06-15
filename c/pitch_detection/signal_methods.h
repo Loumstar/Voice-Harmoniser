@@ -24,3 +24,7 @@ void remove_offset(double complex clip[], double offset){
         clip[i] = (clip[i] - offset) / BIT_DEPTH;
     }
 }
+
+bool is_power_of_two(int x){
+    return (x & (x - 1)) == 0;
+}

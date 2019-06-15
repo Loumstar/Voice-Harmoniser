@@ -1,9 +1,5 @@
 #include "pitch_detection.h"
 
-bool is_power_of_two(int x){
-    return (x & (x - 1)) == 0;
-}
-
 double complex* create_signal(double complex a[], double offset, size_t length){
     /*
     Method to create an array containing the amplitude of a basic waveform, similar to how
@@ -72,7 +68,7 @@ int main(){
     //handle malloc error from create_signal() method.
     if(signl == NULL) return 1;
     //determine the probability of notes of the signal.
-    frequency_bin* notes = get_pitch(signl);
+    frequency_bin* notes = get_pitches(signl);
     free(signl);
     //handle malloc error from the get_pitch() method.
     if(notes == NULL) return 1;

@@ -120,7 +120,7 @@ frequency_bin* get_peaks(double complex clip[]){
     return peaks;
 }
 
-frequency_bin* get_pitch(double complex clip[]){
+frequency_bin* get_pitches(double complex clip[]){
     _convert_to_frequency_domain(clip);
     frequency_bin* peaks = get_peaks(clip);
     
@@ -129,4 +129,20 @@ frequency_bin* get_pitch(double complex clip[]){
     }
 
     return peaks;
+}
+
+double get_pitch(double complex clip[]){
+    frequency_bin* notes = get_pitches(clip);
+    if(notes == NULL) return 0;
+    
+    double f;
+    double max_p = 0;
+
+    for(size_t i = 0; i < PEAKS_ARR_SIZE; i++){
+        if(!isnan(notes[i][2]) && notes[i][2] > max_p){
+            f = notes[i][0];
+        }
+    }
+
+    return f;
 }

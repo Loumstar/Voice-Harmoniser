@@ -1,7 +1,13 @@
 #include <SoftwareSerial.h>
 #include <math.h>
 
-SoftwareSerial midiSerial(10, 11);
+#define AUDIO_IN A0
+#define AUDIO_OUT 5
+
+#define MIDI_IN 10
+#define MIDI_OUT 11
+
+SoftwareSerial midiSerial(MIDI_IN, MIDI_OUT);
 int msg[3];
 
 void note_off(double freq);
@@ -38,6 +44,8 @@ void setup(){
     Serial.begin(9600); // USB baud rate
     while(!Serial); // While USB connection has not been established
     midiSerial.begin(31250); // MIDI baud rate
+
+    pinMode
 }
 
 void loop(){
@@ -47,4 +55,18 @@ void loop(){
         midi_read(msg, midiSerial.available());
         handle_midi(msg);
     }
+    
+    /*
+    Code to play each note based on the speed of the circular buffer.
+
+    Requires:
+    - Circular buffer read of size ??
+    - A list of the speeds to combine the buffers
+
+    Method:
+    1. Loops buffer at rate of highest speed.
+    2. Finds the mean amplitude (input amplitude x volume) across all buffers for each frame of the fastest buffer.
+    3. Outputs the mean to AUDIO_OUT.
+    4. Once input buffer is completed the loop is exited.
+    */
 }
