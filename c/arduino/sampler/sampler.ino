@@ -9,15 +9,15 @@
 #define MIDI_IN 5
 #define MIDI_OUT 6
 
-#define FREQUENCY_IN 10
-#define FREQUENCY_OUT 11
+#define PITCH_DETECTOR_IN 10
+#define PITCH_DETECTOR_OUT 11
 
 #define LATENCY pow(10, -3) // 1 milisecond samples
 #define SAMPLE_RATE 44100 // standard 44.1kHz sample rate
 #define SAMPLE_FRAMES (size_t) SAMPLE_RATE * LATENCY
 
 SoftwareSerial midiDevice(MIDI_IN, MIDI_OUT);
-SoftwareSerial frequencyArduino(FREQUENCY_IN, FREQUENCY_OUT);
+SoftwareSerial pitchDetectorArduino(PITCH_DETECTOR_IN, PITCH_DETECTOR_OUT);
 
 note notes[MAX_VOICES];
 
@@ -35,8 +35,8 @@ void setup(){
     midiDevice.begin(31250); // MIDI baud rate
     while(!midiDevice);
 
-    frequencyArduino.begin(9600); // Arduino baud rate
-    while(!frequencyArduino);
+    pitchDetectorArduino.begin(9600); // Arduino baud rate
+    while(!pitchDetectorArduino);
 
     pinMode(AUDIO_IN, INPUT);
     pinMode(AUDIO_OUT, OUTPUT);
@@ -49,9 +49,9 @@ void loop(){
         handle_midi(msg, notes);
     }
 
-    frequencyArduino.listen();
-    if(frequencyArduino.available()){
-        base_frequency = frequencyArduino.parseFloat();
+    pitchDetectorArduino.listen();
+    if(pitchDetectorArduino.available()){
+        base_frequency = pitchDetectorArduino.parseFloat();
     }
     
     while(frame < SAMPLE_FRAMES){ //records the sample
