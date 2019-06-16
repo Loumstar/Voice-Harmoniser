@@ -12,10 +12,6 @@
 #define PITCH_DETECTOR_IN 10
 #define PITCH_DETECTOR_OUT 11
 
-#define LATENCY pow(10, -3) // 1 milisecond samples
-#define SAMPLE_RATE 44100 // standard 44.1kHz sample rate
-#define SAMPLE_FRAMES (size_t) SAMPLE_RATE * LATENCY
-
 SoftwareSerial midiDevice(MIDI_IN, MIDI_OUT);
 SoftwareSerial pitchDetectorArduino(PITCH_DETECTOR_IN, PITCH_DETECTOR_OUT);
 
@@ -24,7 +20,7 @@ note notes[MAX_VOICES];
 int msg[3]; // max length of midi message is 3.
 int sample[SAMPLE_FRAMES];
 
-double base_frequency;
+double voice_f;
 
 size_t frame = 0;
 
@@ -51,11 +47,11 @@ void loop(){
 
     pitchDetectorArduino.listen();
     if(pitchDetectorArduino.available()){
-        base_frequency = pitchDetectorArduino.parseFloat();
+        voice_f = pitchDetectorArduino.parseFloat();
     }
     
     while(frame < SAMPLE_FRAMES){ //records the sample
-        sample[frame] = analogRead(AUDIO_IN);
+        sample[frame] = analogRead(AUDIO_IN) / ;
         delay(pow(SAMPLE_RATE, -1) * 1000);
         frame++;
     }
@@ -63,19 +59,9 @@ void loop(){
     frame = 0;
 
     while(frame < SAMPLE_FRAMES){
-        digitalWrite(AUDIO_OUT, playback_amplitude(sample, frame, notes));
+        digitalWrite(AUDIO_OUT, playback_amplitude(sample, frame, voice_f, notes) * 255);
         delay(pow(SAMPLE_RATE, -1) * 1000);
         frame++;
     }
-
     frame = 0;
-    /*
-    Code to play each note based on the speed of the circular buffer.
-
-    Method:
-    1. Loops buffer.
-    2. Finds the mean amplitude (input amplitude x volume) across all buffers for each frame of the fastest buffer.
-    3. Outputs the mean to AUDIO_OUT.
-    4. Once input buffer is completed the loop is exited.
-    */
 }
