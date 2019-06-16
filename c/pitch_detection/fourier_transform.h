@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-#include "complex.h"
+#include <complex.h>
 
 #define PI M_PI
 
@@ -17,7 +17,7 @@ void print_magnitude(double complex complex_arr[], size_t s){
     }
 }
 
-double complex* signalCopy(double complex waveform[], size_t n){
+double complex* copy_signal(double complex waveform[], size_t n){
     double complex* copy = malloc(sizeof(double complex) * n);
     for(size_t a = 0; a < n; a++){
         copy[a] = waveform[a];
@@ -40,7 +40,7 @@ void _fft(double complex waveform[], double complex spectrum[], size_t n, size_t
 }
 
 void fft(double complex waveform[], size_t length){
-    double complex* spectrum = signalCopy(waveform, length);
+    double complex* spectrum = copy_signal(waveform, length);
     _fft(waveform, spectrum, length, 1);
 
     free(spectrum);
