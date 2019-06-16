@@ -18,7 +18,7 @@ SoftwareSerial pitchDetectorArduino(PITCH_DETECTOR_IN, PITCH_DETECTOR_OUT);
 note notes[MAX_VOICES];
 
 int msg[3]; // max length of midi message is 3.
-int sample[SAMPLE_FRAMES];
+double sample[SAMPLE_FRAMES];
 
 double voice_f;
 
@@ -51,7 +51,7 @@ void loop(){
     }
     
     while(frame < SAMPLE_FRAMES){ //records the sample
-        sample[frame] = analogRead(AUDIO_IN) / ;
+        sample[frame] = analogRead(AUDIO_IN) / 1024;
         delay(pow(SAMPLE_RATE, -1) * 1000);
         frame++;
     }
