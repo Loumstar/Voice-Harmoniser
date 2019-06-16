@@ -144,5 +144,7 @@ double get_pitch(double complex clip[]){
         }
     }
 
+    free(notes);
+
     return f;
 }

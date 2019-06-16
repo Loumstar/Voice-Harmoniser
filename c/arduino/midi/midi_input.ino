@@ -2,12 +2,17 @@
 #include <math.h>
 
 #define AUDIO_IN A0
-#define AUDIO_OUT 5
+#define AUDIO_OUT 3
 
-#define MIDI_IN 10
-#define MIDI_OUT 11
+#define MIDI_IN 5
+#define MIDI_OUT 6
 
-SoftwareSerial midiSerial(MIDI_IN, MIDI_OUT);
+#define FREQUENCY_IN 10
+#define FREQUENCY_OUT 11
+
+SoftwareSerial midiDevice(MIDI_IN, MIDI_OUT);
+SoftwareSerial frequencyArduino(FREQUENCY_IN, FREQUENCY_OUT);
+
 int msg[3];
 
 void note_off(double freq);
@@ -31,7 +36,7 @@ void handle_midi(int* msg){
 int* midi_read(int* msg, size_t msg_length){
     size_t i = 0;
     while(i < msg_length){
-        msg[i] = midiSerial.read(); //need to check for status byte
+        msg[i] = midiDevice.read(); //need to check for status byte
         i++;
     }
     while(i < 3){
@@ -43,16 +48,22 @@ int* midi_read(int* msg, size_t msg_length){
 void setup(){
     Serial.begin(9600); // USB baud rate
     while(!Serial); // While USB connection has not been established
-    midiSerial.begin(31250); // MIDI baud rate
+    
+    midiDevice.begin(31250); // MIDI baud rate
+    while(!midiDevice);
 
-    pinMode
+    frequencyArduino.begin(9600);
+    while(!frequencyArduino);
+
+    pinMode(AUDIO_IN, INPUT);
+    pinMode(AUDIO_OUT, OUTPUT);
 }
 
 void loop(){
-    midiSerial.listen();
+    midiDevice.listen();
     
-    if(midiSerial.available()){
-        midi_read(msg, midiSerial.available());
+    if(midiDevice.available()){
+        midi_read(msg, midiDevice.available());
         handle_midi(msg);
     }
     
