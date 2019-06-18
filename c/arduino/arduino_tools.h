@@ -1,6 +1,6 @@
 #define LATENCY pow(10, -3) // 1 milisecond samples
 #define SAMPLE_RATE 44100 // standard 44.1kHz sample rate
-#define SAMPLE_FRAMES round(SAMPLE_RATE * LATENCY)
+#define SAMPLE_FRAMES (size_t) round(SAMPLE_RATE * LATENCY)
 
 #define MAX_VOICES 10
 
