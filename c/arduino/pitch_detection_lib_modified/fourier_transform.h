@@ -19,7 +19,7 @@ void print_magnitude(complex complex_arr[], size_t s){
 complex* copy_signal(complex waveform[], size_t n){
     complex* copy = malloc(sizeof(complex) * n);
     for(size_t a = 0; a < n; a++){
-        copy[a] = waveform[a];
+        memcpy(waveform[a], copy[a], sizeof(complex));
     }
     return copy;
 }
@@ -28,14 +28,13 @@ void _fft(complex waveform[], complex spectrum[], size_t n, size_t step){
     if(step < n){
         _fft(spectrum, waveform, n, step * 2);
         _fft(spectrum + step, waveform + step, n, step * 2);
-        complex c, t;
+        complex *c, *t;
 
         for (size_t a = 0; a < n; a += 2 * step){   
-            c[1] = -PI * a / n;         
-            t = *cmult(cexp(&c), &spectrum[a + step]);
-
-            waveform[a / 2] = cadd(&spectrum[a], &t);
-            waveform[(a + n) / 2] = csub(&spectrum[a], &t);
+            *c[1] = -PI * a / n;         
+            t = cmult(cexp(c), &spectrum[a + step]);
+            memcpy(cadd(&spectrum[a], t), waveform[a / 2], sizeof(complex));
+            memcpy(csub(&spectrum[a], t), waveform[(a + n) / 2], sizeof(complex));
         }
     }
 }

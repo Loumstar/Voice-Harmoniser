@@ -75,7 +75,7 @@ double get_noise_level(int f, complex clip[]){
     }
     for(size_t i = lb; i < ub; i++){
         //sum the values
-        sum += cabs(clip[i]);
+        sum += cabs(&clip[i]);
     }
     //divide by the size of the sample.
     return (double) sum / SAMPLE_ARR_SIZE;
@@ -99,11 +99,11 @@ frequency_bin* get_peaks(complex clip[]){
     size_t i = 0;
     for(size_t f = 0; f < floor(CLIP_FRAMES / 2); f++){
         noise = get_noise_level(f, clip);
-        amplitude = cabs(clip[f]);
+        amplitude = cabs(&clip[f]);
         if(
             i < PEAKS_ARR_SIZE
             && _is_non_zero(amplitude)
-            && _is_maxima(cabs(clip[f-1]), amplitude, cabs(clip[f+1]))
+            && _is_maxima(cabs(&clip[f-1]), amplitude, cabs(&clip[f+1]))
             && _is_above_threshold(amplitude, noise)
         ){
             peaks[i][0] = (double) f * FRAME_RATE / CLIP_FRAMES;

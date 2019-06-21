@@ -40,6 +40,14 @@ complex* csub(complex z1[], complex z2[]){
     return &res;
 }
 
+complex* csubtract_by_real_number(complex z1[], double a){
+    complex res = {
+        creal(z1) - a,
+        cimag(z1)
+    };
+    return &res;
+}
+
 complex* cmult(complex z1[], complex z2[]){
     complex res = {
         (creal(z1) * creal(z2)) - (cimag(z1) * cimag(z2)),
@@ -56,12 +64,12 @@ complex* _cdivide_by_real_number(complex z1[], double a){
     return &res;
 }
 
- div(complex z1[], complex z2[]){
+complex* cdiv(complex z1[], complex z2[]){
     complex* res = _cdivide_by_real_number(
         cmult(z1, cconj(z2)),
         pow(cabs(z2), 2)
     );
-    return &res;
+    return res;
 }
 
 complex* cexp(complex z[]){

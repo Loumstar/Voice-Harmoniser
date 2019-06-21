@@ -10,7 +10,7 @@
 
 SoftwareSerial samplerArduino(FREQ_IN, FREQ_OUT);
 
-Complex audio_signal[CLIP_FRAMES];
+complex audio_signal[CLIP_FRAMES];
 double f;
 
 size_t i = 0;
@@ -32,7 +32,7 @@ void loop(){
         samplerArduino.write(f);
         i = 0;
     } else {
-        audio_signal[i] = analogRead(AUDIO_IN);
+        audio_signal[i][0] = analogRead(AUDIO_IN);
         delay(pow(FRAME_RATE, -1) * 1000); //delays by the length of a frame in miliseconds
         i++;
     }
