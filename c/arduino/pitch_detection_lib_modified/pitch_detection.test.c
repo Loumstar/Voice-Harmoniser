@@ -1,6 +1,6 @@
 #include "pitch_detection.h"
 
-complex* create_signal(complex a[], double offset, size_t length){
+complex* create_signal(const double a[4][2], double offset, size_t length){
     /*
     Method to create an array containing the amplitude of a basic waveform, similar to how
     an audio file will be read.
@@ -12,7 +12,7 @@ complex* create_signal(complex a[], double offset, size_t length){
     and imaginary parts respectively.
 
     offset:
-    double represrnting the mean amplitude of the oscillation.
+    double representing the mean amplitude of the oscillation.
 
     length:
     the size of a[].
@@ -21,7 +21,7 @@ complex* create_signal(complex a[], double offset, size_t length){
     //Create a signal using an array of amplitudes that is CLIP_FRAMES long.
     //Must be complex type as fft will convert signal to a complex number.
     complex* signl = malloc(sizeof(complex) * CLIP_FRAMES);
-    //Handle memeory allocation error.
+    //Handle memory allocation error.
     if(signl == NULL){
         print_malloc_error(__func__, sizeof(complex) * CLIP_FRAMES);
         return NULL;
@@ -31,9 +31,10 @@ complex* create_signal(complex a[], double offset, size_t length){
         double sum = 0;
         //sum up the amplitudes of each sine wave to create the signal by superposition.
         for(size_t j = 0; j < length; j++){
-            sum += cimag(a[j]) * sin((double) 2 * PI * creal(a[j]) * i / FRAME_RATE);
+            sum += a[j][1] * sin((double) 2 * PI * a[j][0] * i / FRAME_RATE);
         }
-        signl[i] = sum + offset;
+        signl[i][0] = sum + offset;
+        signl[i][1] = 0;
     }
     //return a pointer to the signal array.
     return signl;
@@ -51,20 +52,24 @@ int main(){
     }
     //Output basic properties of the transform.
     printf(
-        "The maximum frequency measured is %i Hz.\nThe frequency resolution is %.1f Hz.\nThe length of the clip is %.1fs.\n", 
+        "The maximum frequency measured is %i Hz.\nThe frequency resolution is %.1f Hz.\nThe length of the clip is %.3fs.\n", 
         (int) FRAME_RATE / 2,
         (double) FRAME_RATE / CLIP_FRAMES, 
         (double) CLIP_FRAMES / FRAME_RATE
     );
-    //example basic waveform. 
-    complex a[3] = {
-        {20, 255},
-        {50, 128},
-        {75.625, 120}
+    //example basic waveform.     
+    double a[4][2] = {
+        {100, 128},
+        {200, 256},
+        {300, 512},
+        {400, 120}
     };
-    size_t a_size = sizeof(a) / sizeof(complex);
+
+    size_t a_size = 4;
+
     //create the signal.
-    complex* signl = create_signal(a, -0.5, a_size);
+    complex* signl = create_signal(a, 0, a_size);
+    //print_complex_array(signl, 50);
     //handle malloc error from create_signal() method.
     if(signl == NULL) return 1;
     //determine the probability of notes of the signal.

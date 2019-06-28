@@ -2,184 +2,82 @@
 
 #define EULER M_E
 
+/*
+Small script to handle complex arithmetic to be used on the arduino.
+*/
+
 typedef double complex[2];
 
-double creal(complex z[]){
-    return *z[0];
+double creal(const complex z){
+    return z[0];
 }
 
-double cimag(complex z[]){
-    return *z[1];
+double cimag(const complex z){
+    return z[1];
 }
 
-double cabs(complex z[]){
+double cabs(const complex z){
     return hypot(creal(z), cimag(z));
 }
 
-complex* cconj(complex z[]){
-    complex res = {
-        creal(z),
-        -cimag(z)
-    };
-    return &res;
+void cconj(const complex z, complex target){
+    target[0] = creal(z);
+    target[1] = -cimag(z);
 }
 
-complex* cadd(complex z1[], complex z2[]){
-    complex res =  {
-        creal(z1) + creal(z2),
-        cimag(z1) + cimag(z2)
-    };
-    return &res;
+void cadd_by_real(const complex z1, double a, complex target){
+    target[0] = creal(z1) + a;
+    target[1] = cimag(z1);
 }
 
-complex* csub(complex z1[], complex z2[]){
-    complex res = {
-        creal(z1) - creal(z2),
-        cimag(z1) - cimag(z2)
-    };
-    return &res;
+void cadd(const complex z1, const complex z2, complex target){
+    target[0] = creal(z1) + creal(z2);
+    target[1] = cimag(z1) + cimag(z2);
 }
 
-complex* csubtract_by_real_number(complex z1[], double a){
-    complex res = {
-        creal(z1) - a,
-        cimag(z1)
-    };
-    return &res;
+void csub_by_real(const complex z1, double a, complex target){
+    target[0] = creal(z1) - a;
+    target[1] = cimag(z1);
 }
 
-complex* cmult(complex z1[], complex z2[]){
-    complex res = {
+void csub(const complex z1, const complex z2, complex target){
+    target[0] = creal(z1) - creal(z2);
+    target[1] = cimag(z1) - cimag(z2);
+}
+
+void cmult(const complex z1, const complex z2, complex target){
+    complex z3 = { //z3 is used so that if one of the complex numbers is also the target, the calculation is not affected.
         (creal(z1) * creal(z2)) - (cimag(z1) * cimag(z2)),
         (creal(z1) * cimag(z2)) + (cimag(z1) * creal(z2))
     };
-    return &res;
+    target[0] = z3[0];
+    target[1] = z3[1];
 }
 
-complex* _cdivide_by_real_number(complex z1[], double a){
-    complex res = {
-        creal(z1) / a,
-        cimag(z1) / a
-    };
-    return &res;
+void cdiv_by_real(const complex z1, double a, complex target){
+    target[0] = creal(z1) / a;
+    target[1] = cimag(z1) / a;
 }
 
-complex* cdiv(complex z1[], complex z2[]){
-    complex* res = _cdivide_by_real_number(
-        cmult(z1, cconj(z2)),
-        pow(cabs(z2), 2)
-    );
-    return res;
+void cdiv(const complex z1, const complex z2, complex target){
+    /*
+    z1 / z2 
+    = (a+bi) / (c+di) 
+    = (a+bi)(c-di) / (c+di)(c-di)
+    = (a+bi)(c-di) / (c2+d2)
+    = z1 * conj(z2) / hypot(z2)^2
+    */
+    complex z3;
+    cconj(z2, z3);
+    cmult(z1, z3, z3);
+    cdiv_by_real(z3, pow(cabs(z2), 2), target);
 }
 
-complex* cexp(complex z[]){
-    complex res = {
+void cexp(const complex z, complex target){
+    complex z2 = { //z2 is used so that if one of the complex numbers is also the target, the calculation is not affected.
         pow(EULER, creal(z)) * cos(cimag(z)),
-        pow(EULER, creal(z)) * sin(cimag(z)),
+        pow(EULER, creal(z)) * sin(cimag(z))
     };
-    return &res;
+    target[0] = z2[0];
+    target[1] = z2[1];
 }
-
-/*
-class complex {
-    public:
-        double real;
-        double imag;
-
-        void set(double r, double i){
-            real = r; 
-            imag = i;
-        };
-
-        double abs(){
-            return hypot(real, imag);
-        };
-
-        bool operator == (const complex&);
-        bool operator != (const complex&);
-
-        complex operator - (); // negation
-
-        complex operator + (const complex&);
-        complex operator - (const complex&);
-        complex operator * (const complex&);
-        complex operator / (const complex&);
-
-        complex& operator += (const complex&);
-        complex& operator -= (const complex&);
-        complex& operator *= (const complex&);
-        complex& operator /= (const complex&);
-
-}
-
-bool complex::operator == (const complex &c)
-{
-    return (real == c.real) && (imag == c.imag);
-}
-
-bool complex::operator != (const complex &c)
-{
-    return (real != c.real) || (imag != c.imag);
-}
-
-// NEGATE
-complex* complex::operator - ()
-{
-    return complex(-real, -imag);
-}
-
-// BASIC MATH
-complex* complex::operator + (const complex &c)
-{
-    return complex(real + c.real, imag + c.imag);
-}
-
-complex* complex::operator - (const complex &c)
-{
-    return complex(real - c.real, imag - c.imag);
-}
-
-complex* complex::operator * (const complex &c)
-{
-    double r = real * c.real - imag * c.imag;
-    double i = real * c.imag + imag * c.real;
-    return complex(r, i);	
-}
-
-complex* complex::operator / (const complex &c)
-{
-    double f = (c.real * c.real) + (c.imag * c.imag);
-    double r = (real * c.real + imag * c.imag) / f;
-    double i = (imag * c.real - real * c.imag) / f;
-    return complex(r, i);
-}
-
-complex& complex::operator += (const complex &c)
-{
-    real += c.real;
-    imag += c.imag;
-    return *this;
-}
-
-complex& complex::operator -= (const complex &c)
-{
-    real -= c.real;
-    imag -= c.imag;
-    return *this;
-}
-
-complex& complex::operator *= (const complex &c)
-{
-    real = (real * c.real) - (imag * c.imag);
-    imag = (real * c.imag) + (imag * c.real);
-    return *this;
-}
-
-complex& complex::operator /= (const complex &c)
-{
-    double denom = (c.real * c.real) + (c.imag * c.imag);
-    real = (real * c.real + imag * c.imag) / denom;
-    imag = (imag * c.real - real * c.imag) / denom;
-    return *this;
-}
-*/
