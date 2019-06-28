@@ -1,4 +1,4 @@
-#include "complex_mod.h"
+#include "../complex_mod.h"
 #include <stdio.h>
 
 int main(void){

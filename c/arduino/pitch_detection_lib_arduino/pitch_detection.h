@@ -96,6 +96,7 @@ frequency_bin* get_peaks(const complex clip[]){
     
     double noise, amplitude;
     size_t i = 0;
+    
     for(size_t f = 0; f < floor(CLIP_FRAMES / 2); f++){
         noise = get_noise_level(f, clip);
         amplitude = cabs(clip[f]);

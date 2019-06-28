@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "complex_mod.h"
 
 #define PI M_PI

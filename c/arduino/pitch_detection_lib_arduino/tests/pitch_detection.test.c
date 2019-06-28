@@ -1,4 +1,4 @@
-#include "pitch_detection.h"
+#include "../pitch_detection.h"
 
 complex* create_signal(const double a[4][2], double offset, size_t length){
     /*
