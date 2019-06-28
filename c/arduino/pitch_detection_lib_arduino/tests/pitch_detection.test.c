@@ -1,5 +1,13 @@
 #include "../pitch_detection.h"
 
+void print_frequency_bins(const frequency_bin bin[], size_t peaks_arr_size){
+    for(size_t j = 0; j < peaks_arr_size; j++){    
+        if(!isnan(bin[j][0])){
+            printf("(%.f Hz, %.2f dB, %.4f)\n", bin[j][0], bin[j][1], bin[j][2]);
+        }
+    }
+}
+
 complex* create_signal(const double a[4][2], double offset, size_t length){
     /*
     Method to create an array containing the amplitude of a basic waveform, similar to how
@@ -21,11 +29,6 @@ complex* create_signal(const double a[4][2], double offset, size_t length){
     //Create a signal using an array of amplitudes that is CLIP_FRAMES long.
     //Must be complex type as fft will convert signal to a complex number.
     complex* signl = malloc(sizeof(complex) * CLIP_FRAMES);
-    //Handle memory allocation error.
-    if(signl == NULL){
-        print_malloc_error(__func__, sizeof(complex) * CLIP_FRAMES);
-        return NULL;
-    }
     //For each frame in the signal
     for(size_t i = 0; i < CLIP_FRAMES; i++){
         double sum = 0;
@@ -57,6 +60,7 @@ int main(){
         (double) FRAME_RATE / CLIP_FRAMES, 
         (double) CLIP_FRAMES / FRAME_RATE
     );
+    
     //example basic waveform.     
     double a[4][2] = {
         {100, 128},
@@ -69,16 +73,21 @@ int main(){
 
     //create the signal.
     complex* signl = create_signal(a, 0, a_size);
-    //print_complex_array(signl, 50);
+    
     //handle malloc error from create_signal() method.
     if(signl == NULL) return 1;
+    
     //determine the probability of notes of the signal.
     frequency_bin* notes = get_pitches(signl);
+    
     free(signl);
+    
     //handle malloc error from the get_pitch() method.
     if(notes == NULL) return 1;
+    
     //print the array of notes.
     print_frequency_bins(notes, PEAKS_ARR_SIZE);
+    
     free(notes);
     
     return 0;

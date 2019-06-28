@@ -7,10 +7,8 @@
 
 double* get_harmonics(double peak){
     double* harmonics = malloc(sizeof(double) * HARMONICS_ARR_SIZE);
-    if(harmonics == NULL){
-        print_malloc_error(__func__, sizeof(double) * HARMONICS_ARR_SIZE);
-        return NULL;
-    }
+    if(harmonics == NULL) return NULL;
+    
     for(size_t h = 0; h < HARMONICS_ARR_SIZE; h++){
         harmonics[h] = peak * (h + 1);
     }

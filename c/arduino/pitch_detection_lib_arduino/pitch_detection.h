@@ -89,18 +89,13 @@ void _convert_to_frequency_domain(complex clip[]){
 
 frequency_bin* get_peaks(const complex clip[]){
     frequency_bin* peaks = malloc(FREQUENCY_BIN_SIZE * PEAKS_ARR_SIZE);
-    if(peaks == NULL){
-        print_malloc_error(__func__, FREQUENCY_BIN_SIZE * PEAKS_ARR_SIZE);
-        return NULL;
-    }
-    
+    if(peaks == NULL) return NULL;
     double noise, amplitude;
     size_t i = 0;
     
     for(size_t f = 0; f < floor(CLIP_FRAMES / 2); f++){
         noise = get_noise_level(f, clip);
         amplitude = cabs(clip[f]);
-        //printf("%.2f, %.2f, %.2f\n", (double) f * FRAME_RATE / CLIP_FRAMES, amplitude, noise);
         if(
             i < PEAKS_ARR_SIZE
             && _is_non_zero(amplitude)
