@@ -31,7 +31,7 @@ bool _is_above_threshold(double a, double noise){
 
 double decibels(double v){
     //base voltage is one as the amplitude is scaled to between 0 and 1.
-    return 20 * log10f(v);
+    return 20 * log10f(v / BIT_DEPTH);
 }
 
 double get_noise_level(int f, const complex clip[]){
@@ -82,9 +82,11 @@ double get_noise_level(int f, const complex clip[]){
 }
 
 void _convert_to_frequency_domain(complex clip[]){
-    double offset = mean(clip, CLIP_FRAMES);
-    remove_offset(clip, offset);
+    //double offset = mean(clip, CLIP_FRAMES);
+    //remove_offset(clip, offset);
     fft(clip, CLIP_FRAMES);
+    clip[0][0] = 0; //remove offset
+    clip[0][1] = 0;
 }
 
 frequency_bin* get_peaks(const complex clip[]){
