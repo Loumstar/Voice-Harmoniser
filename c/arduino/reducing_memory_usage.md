@@ -21,7 +21,7 @@ Therefore using the difference between using static and dynamic allocation is ve
 ## Converting double to char/int:
 SRAM has 2 kB of memory
 
-As the size of each double is 4 bytes, converting this to an unsigned char, which is only 1 byte, significantly reduces the memory required.
+As the size of each double is 4 bytes, converting this to a char, which is only 1 byte, significantly reduces the memory required.
 
 ```
 char[2] sample[1024]
