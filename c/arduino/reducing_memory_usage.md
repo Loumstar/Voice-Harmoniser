@@ -32,7 +32,7 @@ double[3] peaks[20]
 int harmonics[20]
 ```
 
-The new total memory becomes ~2.5 kB if all statically allocated.
+The new total memory becomes ~8.5 kB if all statically allocated.
 
 ## Reducing size of sample array
 ### Requirements: 
