@@ -1,5 +1,6 @@
-#include "/Users/louismanestar/Documents/vocal_harmoniser/c/arduino/pitch_detection_lib_arduino/pitch_detection.h"
 #include <SoftwareSerial.h>
+
+#include "./c/arduino/pitch_detection_lib_arduino/pitch_detection.h"
 
 #define AUDIO_IN A0
 

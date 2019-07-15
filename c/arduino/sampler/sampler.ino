@@ -1,7 +1,7 @@
 #include <SoftwareSerial.h>
 #include <math.h>
 
-#include "/Users/louismanestar/Documents/vocal_harmoniser/c/arduino/arduino_tools.h"
+#include "./c/arduino/arduino_tools.h"
 
 #define AUDIO_IN A0
 #define AUDIO_OUT 3
@@ -66,7 +66,7 @@ void loop(){
         read_midi(midi_msg, midiDevice);
         handle_midi(midi_msg, notes);
         
-        scanf(serial_msg, "Midi update: %x %x %x.", midi_msg[0], midi_msg[1], midi_msg[2]);
+        sprintf(serial_msg, "Midi update: %x %x %x.", midi_msg[0], midi_msg[1], midi_msg[2]);
         Serial.println(serial_msg);
     }
 
