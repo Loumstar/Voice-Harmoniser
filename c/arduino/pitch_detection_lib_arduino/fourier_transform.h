@@ -6,7 +6,7 @@
 
 void print_complex_array(const complex complex_arr[], size_t s){
     for(size_t j = 0; j < s; j++){
-        printf("%d + i%d\n", creal(complex_arr[j]), cimag(complex_arr[j]));
+        printf("%d + %di\n", creal(complex_arr[j]), cimag(complex_arr[j]));
     }
 }
 
@@ -23,6 +23,7 @@ void _fft(complex waveform[], complex copy[], size_t n, size_t step){
     if(step < n){
         _fft(copy, waveform, n, step * 2);
         _fft(copy + step, waveform + step, n, step * 2);
+        
         double_complex dc1, dc2;
         complex t;
 

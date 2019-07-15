@@ -78,15 +78,14 @@ double get_noise_level(int f, const complex clip[]){
         sum += cabs(clip[i]);
     }
     //divide by the size of the sample.
-    return (double) sum / SAMPLE_ARR_SIZE;
+    return sum / SAMPLE_ARR_SIZE;
 }
 
 void _convert_to_frequency_domain(complex clip[]){
-    //double offset = mean(clip, CLIP_FRAMES);
-    //remove_offset(clip, offset);
+    //runs fourier transform
     fft(clip, CLIP_FRAMES);
-    clip[0][0] = 0; //remove offset
-    clip[0][1] = 0;
+    //removes offset represented by the complex value at 0 Hz.
+    cset_to_zero(clip[0]);
 }
 
 frequency_bin* get_peaks(const complex clip[]){
@@ -105,7 +104,7 @@ frequency_bin* get_peaks(const complex clip[]){
             && _is_above_threshold(amplitude, noise)
         ){
             peaks[i][0] = (double) f * FRAME_RATE / CLIP_FRAMES;
-            peaks[i][1] = (double) decibels(amplitude * 2 / CLIP_FRAMES);
+            peaks[i][1] = decibels(amplitude * 2 / CLIP_FRAMES);
             i++;
         }
     }

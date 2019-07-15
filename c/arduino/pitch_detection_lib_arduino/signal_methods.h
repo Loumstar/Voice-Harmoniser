@@ -1,10 +1,10 @@
 //#include "complex_mod.h"
 //Number of frames recorded per second (typically 44.1kHz for CD).
-#define FRAME_RATE 8192
+#define FRAME_RATE 2560
 //The number of values each frame can take tp describe the waveform.
 #define BIT_DEPTH 1024
 //The number of frames in a clip. Must be a power of two.
-#define CLIP_FRAMES (int) pow(2, 10)
+#define CLIP_FRAMES 512
 #define SAMPLE_LENGTH CLIP_FRAMES / FRAME_RATE
 
 double mean(complex arr[], size_t length){

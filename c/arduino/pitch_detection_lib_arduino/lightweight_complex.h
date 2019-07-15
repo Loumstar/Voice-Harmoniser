@@ -8,6 +8,11 @@ Small script to handle complex arithmetic to be used on the arduino.
 
 typedef int complex[2];
 
+void cset_to_zero(complex z){
+    z[0] = 0; 
+    z[1] = 0;
+}
+
 int creal(const complex z){
     return z[0];
 }
