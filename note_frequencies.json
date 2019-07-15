@@ -3,7 +3,11 @@
         "bounds": {
             "lb": 4068.5375
         },
-        "frequency": "4186.009",
+        "frequency": 4186.009,
+        "note_difference": {
+            "next": 0,
+            "previous": 234.943
+        },
         "notes": [
             "C8"
         ],
@@ -14,7 +18,11 @@
             "lb": 3840.188,
             "ub": 4068.5375
         },
-        "frequency": "3951.066",
+        "frequency": 3951.066,
+        "note_difference": {
+            "next": 234.943,
+            "previous": 221.756
+        },
         "notes": [
             "B7"
         ],
@@ -25,7 +33,11 @@
             "lb": 3624.655,
             "ub": 3840.188
         },
-        "frequency": "3729.310",
+        "frequency": 3729.31,
+        "note_difference": {
+            "next": 221.756,
+            "previous": 209.31
+        },
         "notes": [
             "A#7",
             "Bb7"
@@ -37,7 +49,11 @@
             "lb": 3421.219,
             "ub": 3624.655
         },
-        "frequency": "3520.000",
+        "frequency": 3520.0,
+        "note_difference": {
+            "next": 209.31,
+            "previous": 197.562
+        },
         "notes": [
             "A7"
         ],
@@ -48,7 +64,11 @@
             "lb": 3229.2005,
             "ub": 3421.219
         },
-        "frequency": "3322.438",
+        "frequency": 3322.438,
+        "note_difference": {
+            "next": 197.562,
+            "previous": 186.475
+        },
         "notes": [
             "G#7",
             "Ab7"
@@ -60,7 +80,11 @@
             "lb": 3047.959,
             "ub": 3229.2005
         },
-        "frequency": "3135.963",
+        "frequency": 3135.963,
+        "note_difference": {
+            "next": 186.475,
+            "previous": 176.008
+        },
         "notes": [
             "G7"
         ],
@@ -71,7 +95,11 @@
             "lb": 2876.8905,
             "ub": 3047.959
         },
-        "frequency": "2959.955",
+        "frequency": 2959.955,
+        "note_difference": {
+            "next": 176.008,
+            "previous": 166.129
+        },
         "notes": [
             "F#7",
             "Gb7"
@@ -83,7 +111,11 @@
             "lb": 2715.423,
             "ub": 2876.8905
         },
-        "frequency": "2793.826",
+        "frequency": 2793.826,
+        "note_difference": {
+            "next": 166.129,
+            "previous": 156.806
+        },
         "notes": [
             "F7"
         ],
@@ -94,7 +126,11 @@
             "lb": 2563.018,
             "ub": 2715.423
         },
-        "frequency": "2637.020",
+        "frequency": 2637.02,
+        "note_difference": {
+            "next": 156.806,
+            "previous": 148.004
+        },
         "notes": [
             "E7"
         ],
@@ -105,7 +141,11 @@
             "lb": 2419.167,
             "ub": 2563.018
         },
-        "frequency": "2489.016",
+        "frequency": 2489.016,
+        "note_difference": {
+            "next": 148.004,
+            "previous": 139.698
+        },
         "notes": [
             "D#7",
             "Eb7"
@@ -117,7 +157,11 @@
             "lb": 2283.3895,
             "ub": 2419.167
         },
-        "frequency": "2349.318",
+        "frequency": 2349.318,
+        "note_difference": {
+            "next": 139.698,
+            "previous": 131.857
+        },
         "notes": [
             "D7"
         ],
@@ -128,7 +172,11 @@
             "lb": 2155.233,
             "ub": 2283.3895
         },
-        "frequency": "2217.461",
+        "frequency": 2217.461,
+        "note_difference": {
+            "next": 131.857,
+            "previous": 124.456
+        },
         "notes": [
             "C#7",
             "Db7"
@@ -140,7 +188,11 @@
             "lb": 2034.269,
             "ub": 2155.233
         },
-        "frequency": "2093.005",
+        "frequency": 2093.005,
+        "note_difference": {
+            "next": 124.456,
+            "previous": 117.472
+        },
         "notes": [
             "C7"
         ],
@@ -151,7 +203,11 @@
             "lb": 1920.094,
             "ub": 2034.269
         },
-        "frequency": "1975.533",
+        "frequency": 1975.533,
+        "note_difference": {
+            "next": 117.472,
+            "previous": 110.878
+        },
         "notes": [
             "B6"
         ],
@@ -162,7 +218,11 @@
             "lb": 1812.3275,
             "ub": 1920.094
         },
-        "frequency": "1864.655",
+        "frequency": 1864.655,
+        "note_difference": {
+            "next": 110.878,
+            "previous": 104.655
+        },
         "notes": [
             "A#6",
             "Bb6"
@@ -174,7 +234,11 @@
             "lb": 1710.6095,
             "ub": 1812.3275
         },
-        "frequency": "1760.000",
+        "frequency": 1760.0,
+        "note_difference": {
+            "next": 104.655,
+            "previous": 98.781
+        },
         "notes": [
             "A6"
         ],
@@ -185,7 +249,11 @@
             "lb": 1614.6005,
             "ub": 1710.6095
         },
-        "frequency": "1661.219",
+        "frequency": 1661.219,
+        "note_difference": {
+            "next": 98.781,
+            "previous": 93.237
+        },
         "notes": [
             "G#6",
             "Ab6"
@@ -197,7 +265,11 @@
             "lb": 1523.98,
             "ub": 1614.6005
         },
-        "frequency": "1567.982",
+        "frequency": 1567.982,
+        "note_difference": {
+            "next": 93.237,
+            "previous": 88.004
+        },
         "notes": [
             "G6"
         ],
@@ -208,7 +280,11 @@
             "lb": 1438.4455,
             "ub": 1523.98
         },
-        "frequency": "1479.978",
+        "frequency": 1479.978,
+        "note_difference": {
+            "next": 88.004,
+            "previous": 83.065
+        },
         "notes": [
             "F#6",
             "Gb6"
@@ -220,7 +296,11 @@
             "lb": 1357.7115,
             "ub": 1438.4455
         },
-        "frequency": "1396.913",
+        "frequency": 1396.913,
+        "note_difference": {
+            "next": 83.065,
+            "previous": 78.403
+        },
         "notes": [
             "F6"
         ],
@@ -231,7 +311,11 @@
             "lb": 1281.509,
             "ub": 1357.7115
         },
-        "frequency": "1318.510",
+        "frequency": 1318.51,
+        "note_difference": {
+            "next": 78.403,
+            "previous": 74.002
+        },
         "notes": [
             "E6"
         ],
@@ -242,7 +326,11 @@
             "lb": 1209.5835,
             "ub": 1281.509
         },
-        "frequency": "1244.508",
+        "frequency": 1244.508,
+        "note_difference": {
+            "next": 74.002,
+            "previous": 69.849
+        },
         "notes": [
             "D#6",
             "Eb6"
@@ -254,7 +342,11 @@
             "lb": 1141.695,
             "ub": 1209.5835
         },
-        "frequency": "1174.659",
+        "frequency": 1174.659,
+        "note_difference": {
+            "next": 69.849,
+            "previous": 65.928
+        },
         "notes": [
             "D6"
         ],
@@ -265,7 +357,11 @@
             "lb": 1077.6165,
             "ub": 1141.695
         },
-        "frequency": "1108.731",
+        "frequency": 1108.731,
+        "note_difference": {
+            "next": 65.928,
+            "previous": 62.229
+        },
         "notes": [
             "C#6",
             "Db6"
@@ -277,7 +373,11 @@
             "lb": 1017.1343,
             "ub": 1077.6165
         },
-        "frequency": "1046.502",
+        "frequency": 1046.502,
+        "note_difference": {
+            "next": 62.229,
+            "previous": 58.7354
+        },
         "notes": [
             "C6"
         ],
@@ -288,7 +388,11 @@
             "lb": 960.04705,
             "ub": 1017.1343
         },
-        "frequency": "987.7666",
+        "frequency": 987.7666,
+        "note_difference": {
+            "next": 58.7354,
+            "previous": 55.4391
+        },
         "notes": [
             "B5"
         ],
@@ -299,7 +403,11 @@
             "lb": 906.16375,
             "ub": 960.04705
         },
-        "frequency": "932.3275",
+        "frequency": 932.3275,
+        "note_difference": {
+            "next": 55.4391,
+            "previous": 52.3275
+        },
         "notes": [
             "A#5",
             "Bb5"
@@ -311,7 +419,11 @@
             "lb": 855.3047,
             "ub": 906.16375
         },
-        "frequency": "880.0000",
+        "frequency": 880.0,
+        "note_difference": {
+            "next": 52.3275,
+            "previous": 49.3906
+        },
         "notes": [
             "A5"
         ],
@@ -322,7 +434,11 @@
             "lb": 807.30015,
             "ub": 855.3047
         },
-        "frequency": "830.6094",
+        "frequency": 830.6094,
+        "note_difference": {
+            "next": 49.3906,
+            "previous": 46.6185
+        },
         "notes": [
             "G#5",
             "Ab5"
@@ -334,7 +450,11 @@
             "lb": 761.98985,
             "ub": 807.30015
         },
-        "frequency": "783.9909",
+        "frequency": 783.9909,
+        "note_difference": {
+            "next": 46.6185,
+            "previous": 44.0021
+        },
         "notes": [
             "G5"
         ],
@@ -345,7 +465,11 @@
             "lb": 719.22265,
             "ub": 761.98985
         },
-        "frequency": "739.9888",
+        "frequency": 739.9888,
+        "note_difference": {
+            "next": 44.0021,
+            "previous": 41.5323
+        },
         "notes": [
             "F#5",
             "Gb5"
@@ -357,7 +481,11 @@
             "lb": 678.8558,
             "ub": 719.22265
         },
-        "frequency": "698.4565",
+        "frequency": 698.4565,
+        "note_difference": {
+            "next": 41.5323,
+            "previous": 39.2014
+        },
         "notes": [
             "F5"
         ],
@@ -368,7 +496,11 @@
             "lb": 640.75455,
             "ub": 678.8558
         },
-        "frequency": "659.2551",
+        "frequency": 659.2551,
+        "note_difference": {
+            "next": 39.2014,
+            "previous": 37.0011
+        },
         "notes": [
             "E5"
         ],
@@ -379,7 +511,11 @@
             "lb": 604.79175,
             "ub": 640.75455
         },
-        "frequency": "622.2540",
+        "frequency": 622.254,
+        "note_difference": {
+            "next": 37.0011,
+            "previous": 34.9245
+        },
         "notes": [
             "D#5",
             "Eb5"
@@ -391,7 +527,11 @@
             "lb": 570.8474,
             "ub": 604.79175
         },
-        "frequency": "587.3295",
+        "frequency": 587.3295,
+        "note_difference": {
+            "next": 34.9245,
+            "previous": 32.9642
+        },
         "notes": [
             "D5"
         ],
@@ -402,7 +542,11 @@
             "lb": 538.8082,
             "ub": 570.8474
         },
-        "frequency": "554.3653",
+        "frequency": 554.3653,
+        "note_difference": {
+            "next": 32.9642,
+            "previous": 31.1142
+        },
         "notes": [
             "C#5",
             "Db5"
@@ -414,7 +558,11 @@
             "lb": 508.5672,
             "ub": 538.8082
         },
-        "frequency": "523.2511",
+        "frequency": 523.2511,
+        "note_difference": {
+            "next": 31.1142,
+            "previous": 29.3678
+        },
         "notes": [
             "C5"
         ],
@@ -425,7 +573,11 @@
             "lb": 480.02355,
             "ub": 508.5672
         },
-        "frequency": "493.8833",
+        "frequency": 493.8833,
+        "note_difference": {
+            "next": 29.3678,
+            "previous": 27.7195
+        },
         "notes": [
             "B4"
         ],
@@ -436,7 +588,11 @@
             "lb": 453.0819,
             "ub": 480.02355
         },
-        "frequency": "466.1638",
+        "frequency": 466.1638,
+        "note_difference": {
+            "next": 27.7195,
+            "previous": 26.1638
+        },
         "notes": [
             "A#4",
             "Bb4"
@@ -448,7 +604,11 @@
             "lb": 427.65235,
             "ub": 453.0819
         },
-        "frequency": "440.0000",
+        "frequency": 440.0,
+        "note_difference": {
+            "next": 26.1638,
+            "previous": 24.6953
+        },
         "notes": [
             "A440"
         ],
@@ -459,7 +619,11 @@
             "lb": 403.65005,
             "ub": 427.65235
         },
-        "frequency": "415.3047",
+        "frequency": 415.3047,
+        "note_difference": {
+            "next": 24.6953,
+            "previous": 23.3093
+        },
         "notes": [
             "G#4",
             "Ab4"
@@ -471,7 +635,11 @@
             "lb": 380.9949,
             "ub": 403.65005
         },
-        "frequency": "391.9954",
+        "frequency": 391.9954,
+        "note_difference": {
+            "next": 23.3093,
+            "previous": 22.001
+        },
         "notes": [
             "G4"
         ],
@@ -482,7 +650,11 @@
             "lb": 359.6113,
             "ub": 380.9949
         },
-        "frequency": "369.9944",
+        "frequency": 369.9944,
+        "note_difference": {
+            "next": 22.001,
+            "previous": 20.7662
+        },
         "notes": [
             "F#4",
             "Gb4"
@@ -494,7 +666,11 @@
             "lb": 339.4279,
             "ub": 359.6113
         },
-        "frequency": "349.2282",
+        "frequency": 349.2282,
+        "note_difference": {
+            "next": 20.7662,
+            "previous": 19.6006
+        },
         "notes": [
             "F4"
         ],
@@ -505,7 +681,11 @@
             "lb": 320.3773,
             "ub": 339.4279
         },
-        "frequency": "329.6276",
+        "frequency": 329.6276,
+        "note_difference": {
+            "next": 19.6006,
+            "previous": 18.5006
+        },
         "notes": [
             "E4"
         ],
@@ -516,7 +696,11 @@
             "lb": 302.3959,
             "ub": 320.3773
         },
-        "frequency": "311.1270",
+        "frequency": 311.127,
+        "note_difference": {
+            "next": 18.5006,
+            "previous": 17.4622
+        },
         "notes": [
             "D#4",
             "Eb4"
@@ -528,7 +712,11 @@
             "lb": 285.4237,
             "ub": 302.3959
         },
-        "frequency": "293.6648",
+        "frequency": 293.6648,
+        "note_difference": {
+            "next": 17.4622,
+            "previous": 16.4822
+        },
         "notes": [
             "D4"
         ],
@@ -539,7 +727,11 @@
             "lb": 269.4041,
             "ub": 285.4237
         },
-        "frequency": "277.1826",
+        "frequency": 277.1826,
+        "note_difference": {
+            "next": 16.4822,
+            "previous": 15.557
+        },
         "notes": [
             "C#4",
             "Db4"
@@ -551,7 +743,11 @@
             "lb": 254.28365,
             "ub": 269.4041
         },
-        "frequency": "261.6256",
+        "frequency": 261.6256,
+        "note_difference": {
+            "next": 15.557,
+            "previous": 14.6839
+        },
         "notes": [
             "C4"
         ],
@@ -562,7 +758,11 @@
             "lb": 240.0118,
             "ub": 254.28365
         },
-        "frequency": "246.9417",
+        "frequency": 246.9417,
+        "note_difference": {
+            "next": 14.6839,
+            "previous": 13.8598
+        },
         "notes": [
             "B3"
         ],
@@ -573,7 +773,11 @@
             "lb": 226.54095,
             "ub": 240.0118
         },
-        "frequency": "233.0819",
+        "frequency": 233.0819,
+        "note_difference": {
+            "next": 13.8598,
+            "previous": 13.0819
+        },
         "notes": [
             "A#3",
             "Bb3"
@@ -585,7 +789,11 @@
             "lb": 213.82615,
             "ub": 226.54095
         },
-        "frequency": "220.0000",
+        "frequency": 220.0,
+        "note_difference": {
+            "next": 13.0819,
+            "previous": 12.3477
+        },
         "notes": [
             "A3"
         ],
@@ -596,7 +804,11 @@
             "lb": 201.825,
             "ub": 213.82615
         },
-        "frequency": "207.6523",
+        "frequency": 207.6523,
+        "note_difference": {
+            "next": 12.3477,
+            "previous": 11.6546
+        },
         "notes": [
             "G#3",
             "Ab3"
@@ -608,7 +820,11 @@
             "lb": 190.49745,
             "ub": 201.825
         },
-        "frequency": "195.9977",
+        "frequency": 195.9977,
+        "note_difference": {
+            "next": 11.6546,
+            "previous": 11.0005
+        },
         "notes": [
             "G3"
         ],
@@ -619,7 +835,11 @@
             "lb": 179.80565,
             "ub": 190.49745
         },
-        "frequency": "184.9972",
+        "frequency": 184.9972,
+        "note_difference": {
+            "next": 11.0005,
+            "previous": 10.3831
+        },
         "notes": [
             "F#3",
             "Gb3"
@@ -631,7 +851,11 @@
             "lb": 169.71395,
             "ub": 179.80565
         },
-        "frequency": "174.6141",
+        "frequency": 174.6141,
+        "note_difference": {
+            "next": 10.3831,
+            "previous": 9.8003
+        },
         "notes": [
             "F3"
         ],
@@ -642,7 +866,11 @@
             "lb": 160.18865,
             "ub": 169.71395
         },
-        "frequency": "164.8138",
+        "frequency": 164.8138,
+        "note_difference": {
+            "next": 9.8003,
+            "previous": 9.2503
+        },
         "notes": [
             "E3"
         ],
@@ -653,7 +881,11 @@
             "lb": 151.19795,
             "ub": 160.18865
         },
-        "frequency": "155.5635",
+        "frequency": 155.5635,
+        "note_difference": {
+            "next": 9.2503,
+            "previous": 8.7311
+        },
         "notes": [
             "D#3",
             "Eb3"
@@ -665,7 +897,11 @@
             "lb": 142.71185,
             "ub": 151.19795
         },
-        "frequency": "146.8324",
+        "frequency": 146.8324,
+        "note_difference": {
+            "next": 8.7311,
+            "previous": 8.2411
+        },
         "notes": [
             "D3"
         ],
@@ -676,7 +912,11 @@
             "lb": 134.70205,
             "ub": 142.71185
         },
-        "frequency": "138.5913",
+        "frequency": 138.5913,
+        "note_difference": {
+            "next": 8.2411,
+            "previous": 7.7785
+        },
         "notes": [
             "C#3",
             "Db3"
@@ -688,7 +928,11 @@
             "lb": 127.1418,
             "ub": 134.70205
         },
-        "frequency": "130.8128",
+        "frequency": 130.8128,
+        "note_difference": {
+            "next": 7.7785,
+            "previous": 7.342
+        },
         "notes": [
             "C3"
         ],
@@ -699,7 +943,11 @@
             "lb": 120.00585,
             "ub": 127.1418
         },
-        "frequency": "123.4708",
+        "frequency": 123.4708,
+        "note_difference": {
+            "next": 7.342,
+            "previous": 6.9299
+        },
         "notes": [
             "B2"
         ],
@@ -710,7 +958,11 @@
             "lb": 113.27045,
             "ub": 120.00585
         },
-        "frequency": "116.5409",
+        "frequency": 116.5409,
+        "note_difference": {
+            "next": 6.9299,
+            "previous": 6.5409
+        },
         "notes": [
             "A#2",
             "Bb2"
@@ -722,7 +974,11 @@
             "lb": 106.9131,
             "ub": 113.27045
         },
-        "frequency": "110.0000",
+        "frequency": 110.0,
+        "note_difference": {
+            "next": 6.5409,
+            "previous": 6.1738
+        },
         "notes": [
             "A2"
         ],
@@ -733,7 +989,11 @@
             "lb": 100.91253,
             "ub": 106.9131
         },
-        "frequency": "103.8262",
+        "frequency": 103.8262,
+        "note_difference": {
+            "next": 6.1738,
+            "previous": 5.82734
+        },
         "notes": [
             "G#2",
             "Ab2"
@@ -745,7 +1005,11 @@
             "lb": 95.248735,
             "ub": 100.91253
         },
-        "frequency": "97.99886",
+        "frequency": 97.99886,
+        "note_difference": {
+            "next": 5.82734,
+            "previous": 5.50025
+        },
         "notes": [
             "G2"
         ],
@@ -756,7 +1020,11 @@
             "lb": 89.902835,
             "ub": 95.248735
         },
-        "frequency": "92.49861",
+        "frequency": 92.49861,
+        "note_difference": {
+            "next": 5.50025,
+            "previous": 5.19155
+        },
         "notes": [
             "F#2",
             "Gb2"
@@ -768,7 +1036,11 @@
             "lb": 84.856975,
             "ub": 89.902835
         },
-        "frequency": "87.30706",
+        "frequency": 87.30706,
+        "note_difference": {
+            "next": 5.19155,
+            "previous": 4.90017
+        },
         "notes": [
             "F2"
         ],
@@ -779,7 +1051,11 @@
             "lb": 80.09432,
             "ub": 84.856975
         },
-        "frequency": "82.40689",
+        "frequency": 82.40689,
+        "note_difference": {
+            "next": 4.90017,
+            "previous": 4.62514
+        },
         "notes": [
             "E2"
         ],
@@ -790,7 +1066,11 @@
             "lb": 75.59897,
             "ub": 80.09432
         },
-        "frequency": "77.78175",
+        "frequency": 77.78175,
+        "note_difference": {
+            "next": 4.62514,
+            "previous": 4.36556
+        },
         "notes": [
             "D#2",
             "Eb2"
@@ -802,7 +1082,11 @@
             "lb": 71.355925,
             "ub": 75.59897
         },
-        "frequency": "73.41619",
+        "frequency": 73.41619,
+        "note_difference": {
+            "next": 4.36556,
+            "previous": 4.12053
+        },
         "notes": [
             "D2"
         ],
@@ -813,7 +1097,11 @@
             "lb": 67.351025,
             "ub": 71.355925
         },
-        "frequency": "69.29566",
+        "frequency": 69.29566,
+        "note_difference": {
+            "next": 4.12053,
+            "previous": 3.88927
+        },
         "notes": [
             "C#2",
             "Db2"
@@ -825,7 +1113,11 @@
             "lb": 63.5709,
             "ub": 67.351025
         },
-        "frequency": "65.40639",
+        "frequency": 65.40639,
+        "note_difference": {
+            "next": 3.88927,
+            "previous": 3.67098
+        },
         "notes": [
             "C2"
         ],
@@ -836,7 +1128,11 @@
             "lb": 60.00294,
             "ub": 63.5709
         },
-        "frequency": "61.73541",
+        "frequency": 61.73541,
+        "note_difference": {
+            "next": 3.67098,
+            "previous": 3.46494
+        },
         "notes": [
             "B1"
         ],
@@ -847,7 +1143,11 @@
             "lb": 56.635235,
             "ub": 60.00294
         },
-        "frequency": "58.27047",
+        "frequency": 58.27047,
+        "note_difference": {
+            "next": 3.46494,
+            "previous": 3.27047
+        },
         "notes": [
             "A#1",
             "Bb1"
@@ -859,7 +1159,11 @@
             "lb": 53.456545,
             "ub": 56.635235
         },
-        "frequency": "55.00000",
+        "frequency": 55.0,
+        "note_difference": {
+            "next": 3.27047,
+            "previous": 3.08691
+        },
         "notes": [
             "A1"
         ],
@@ -870,7 +1174,11 @@
             "lb": 50.45626,
             "ub": 53.456545
         },
-        "frequency": "51.91309",
+        "frequency": 51.91309,
+        "note_difference": {
+            "next": 3.08691,
+            "previous": 2.91366
+        },
         "notes": [
             "G#1",
             "Ab1"
@@ -882,7 +1190,11 @@
             "lb": 47.624365,
             "ub": 50.45626
         },
-        "frequency": "48.99943",
+        "frequency": 48.99943,
+        "note_difference": {
+            "next": 2.91366,
+            "previous": 2.75013
+        },
         "notes": [
             "G1"
         ],
@@ -893,7 +1205,11 @@
             "lb": 44.951415,
             "ub": 47.624365
         },
-        "frequency": "46.24930",
+        "frequency": 46.2493,
+        "note_difference": {
+            "next": 2.75013,
+            "previous": 2.59577
+        },
         "notes": [
             "F#1",
             "Gb1"
@@ -905,7 +1221,11 @@
             "lb": 42.428485,
             "ub": 44.951415
         },
-        "frequency": "43.65353",
+        "frequency": 43.65353,
+        "note_difference": {
+            "next": 2.59577,
+            "previous": 2.45009
+        },
         "notes": [
             "F1"
         ],
@@ -916,7 +1236,11 @@
             "lb": 40.047155,
             "ub": 42.428485
         },
-        "frequency": "41.20344",
+        "frequency": 41.20344,
+        "note_difference": {
+            "next": 2.45009,
+            "previous": 2.31257
+        },
         "notes": [
             "E1"
         ],
@@ -927,7 +1251,11 @@
             "lb": 37.799485,
             "ub": 40.047155
         },
-        "frequency": "38.89087",
+        "frequency": 38.89087,
+        "note_difference": {
+            "next": 2.31257,
+            "previous": 2.18277
+        },
         "notes": [
             "D#1",
             "Eb1"
@@ -939,7 +1267,11 @@
             "lb": 35.677965,
             "ub": 37.799485
         },
-        "frequency": "36.70810",
+        "frequency": 36.7081,
+        "note_difference": {
+            "next": 2.18277,
+            "previous": 2.06027
+        },
         "notes": [
             "D1"
         ],
@@ -950,7 +1282,11 @@
             "lb": 33.675515,
             "ub": 35.677965
         },
-        "frequency": "34.64783",
+        "frequency": 34.64783,
+        "note_difference": {
+            "next": 2.06027,
+            "previous": 1.94463
+        },
         "notes": [
             "C#1",
             "Db1"
@@ -961,7 +1297,11 @@
         "bounds": {
             "ub": 33.675515
         },
-        "frequency": "32.70320",
+        "frequency": 32.7032,
+        "note_difference": {
+            "next": 1.94463,
+            "previous": 0
+        },
         "notes": [
             "C1"
         ],
