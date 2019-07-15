@@ -9,7 +9,7 @@ double harmonics[20]
 
 The size of the SRAM on an Arduino Uno is 2 kB.
 
-If necessary, this can be upgraded to 8kB with the Arduino Mega 2560 (which might be cheaper as both arduino scripts could be run simultaneously using multithreading).
+If necessary, this can be upgraded to 8kB with the Arduino ATmega2560 (which might be cheaper as both arduino scripts could be run simultaneously using multithreading).
 
 At 1024 frames per sample, the original memory allocated is 8 kB per sample.
 Therefore 16 kB is allocated to the samples alone.
