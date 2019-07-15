@@ -23,13 +23,19 @@ void _fft(complex waveform[], complex copy[], size_t n, size_t step){
     if(step < n){
         _fft(copy, waveform, n, step * 2);
         _fft(copy + step, waveform + step, n, step * 2);
-        complex c, t;
+        double_complex c;
+        complex t;
 
         for(size_t a = 0; a < n; a += step * 2){   
             c[0] = 0;
             c[1] = -PI * a / n;
-            cexp(c, c);   
-            cmult(c, copy[a + step], t);
+            
+            dcexp(c, c);   
+            dcmult(c, copy[a + step], c);
+
+            t[0] = (unsigned char) c[0];
+            t[1] = (unsigned char) c[1];
+
             cadd(copy[a], t, waveform[a / 2]);
             csub(copy[a], t, waveform[(a + n) / 2]);
         }

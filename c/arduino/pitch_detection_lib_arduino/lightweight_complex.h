@@ -6,26 +6,35 @@
 Small script to handle complex arithmetic to be used on the arduino.
 */
 
-typedef double complex[2];
+typedef char complex[2];
+typedef double double_complex[2];
 
-double creal(const complex z){
+char creal(const complex z){
     return z[0];
 }
 
-double cimag(const complex z){
+char cimag(const complex z){
     return z[1];
 }
 
-double cabs(const complex z){
-    return hypot(creal(z), cimag(z));
+double dcreal(const double_complex z){
+    return z[0];
 }
 
+double dcimag(const double_complex z){
+    return z[1];
+}
+
+char cabs(const complex z){
+    return hypot(creal(z), cimag(z));
+}
+/*
 void cconj(const complex z, complex target){
     target[0] = creal(z);
     target[1] = -cimag(z);
 }
-
-void cadd_by_real(const complex z1, double a, complex target){
+*/
+void cadd_by_real(const complex z1, char a, complex target){
     target[0] = creal(z1) + a;
     target[1] = cimag(z1);
 }
@@ -35,7 +44,7 @@ void cadd(const complex z1, const complex z2, complex target){
     target[1] = cimag(z1) + cimag(z2);
 }
 
-void csub_by_real(const complex z1, double a, complex target){
+void csub_by_real(const complex z1, char a, complex target){
     target[0] = creal(z1) - a;
     target[1] = cimag(z1);
 }
@@ -54,30 +63,39 @@ void cmult(const complex z1, const complex z2, complex target){
     target[1] = z3[1];
 }
 
-void cdiv_by_real(const complex z1, double a, complex target){
+void cdiv_by_real(const complex z1, char a, complex target){
     target[0] = creal(z1) / a;
     target[1] = cimag(z1) / a;
 }
-
+/*
 void cdiv(const complex z1, const complex z2, complex target){
-    /*
+    
     z1 / z2 
     = (a+bi) / (c+di) 
     = (a+bi)(c-di) / (c+di)(c-di)
     = (a+bi)(c-di) / (c2+d2)
     = z1 * conj(z2) / hypot(z2)^2
-    */
+    
     complex z3;
     cconj(z2, z3);
     cmult(z1, z3, z3);
     cdiv_by_real(z3, pow(cabs(z2), 2), target);
 }
-
-void cexp(const complex z, complex target){
-    complex z2 = { //z2 is used so that if one of the complex numbers is also the target, the calculation is not affected.
-        pow(EULER, creal(z)) * cos(cimag(z)),
-        pow(EULER, creal(z)) * sin(cimag(z))
+*/
+void dcexp(const double_complex z, double_complex target){
+    double_complex z2 = { //z2 is used so that if one of the complex numbers is also the target, the calculation is not affected.
+        pow(EULER, dcreal(z)) * cos(dcimag(z)),
+        pow(EULER, dcreal(z)) * sin(dcimag(z))
     };
     target[0] = z2[0];
     target[1] = z2[1];
+}
+
+void dcmult(const double_complex z1, const double_complex z2, double_complex target){
+    complex z3 = { //z3 is used so that if one of the complex numbers is also the target, the calculation is not affected.
+        (dcreal(z1) * dcreal(z2)) - (dcimag(z1) * dcimag(z2)),
+        (dcreal(z1) * dcimag(z2)) + (dcimag(z1) * dcreal(z2))
+    };
+    target[0] = z3[0];
+    target[1] = z3[1];
 }
