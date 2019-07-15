@@ -31,7 +31,7 @@ complex* create_signal(const double a[4][2], double offset, size_t length){
     complex* signl = malloc(sizeof(complex) * CLIP_FRAMES);
     //For each frame in the signal
     for(size_t i = 0; i < CLIP_FRAMES; i++){
-        char sum = 0;
+        int sum = 0;
         //sum up the amplitudes of each sine wave to create the signal by superposition.
         for(size_t j = 0; j < length; j++){
             sum += a[j][1] * sin((double) 2 * PI * a[j][0] * i / FRAME_RATE);
