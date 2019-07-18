@@ -38,7 +38,7 @@ void setup(){
     while(!pitchDetector);
     Serial.println("Pitch Detector Arduino connection established");
 
-    scanf(
+    sprintf(
         serial_msg, 
         "Initial Setup:\nSampling Rate: %d Hz.\nSample length %d ms.\n%d frames per sample.", 
         SAMPLE_RATE, 
@@ -53,7 +53,7 @@ void setup(){
     }
     voice_f = pitchDetector.parseFloat();
     
-    scanf(serial_msg, "New voice frequency: %d", voice_f);
+    sprintf(serial_msg, "New voice frequency: %d", voice_f);
     Serial.println(serial_msg);
 
     pinMode(AUDIO_IN, INPUT);
@@ -74,7 +74,7 @@ void loop(){
     if(pitchDetector.available()){
         voice_f = pitchDetector.parseFloat();
 
-        scanf(serial_msg, "New voice frequency: %f", voice_f);
+        sprintf(serial_msg, "New voice frequency: %f", voice_f);
         Serial.println(serial_msg);
     }
 
