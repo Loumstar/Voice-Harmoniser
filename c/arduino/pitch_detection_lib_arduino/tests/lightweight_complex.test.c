@@ -4,11 +4,7 @@
 #include <stdbool.h>
 
 bool assert_int_equal(int a, int b){
-    if(a == b){
-        return true;
-    } else {
-        return false;
-    }
+    return a == b;
 }
 
 bool assert_double_equal(double a, double b){
@@ -17,37 +13,16 @@ bool assert_double_equal(double a, double b){
     sprintf(string1, "%.3f", a);
     sprintf(string2, "%.3f", b);
 
-    if(!strcmp(string1, string2)){
-        return true;
-    } else {
-        return false;
-    }
+    return !strcmp(string1, string2);
 }
 
 bool assert_int_complex_equal(const complex z, int real, int imag){
-    if(creal(z) == real && cimag(z) == imag){
-        return true;
-    } else {
-        return false;
-    }
+    return creal(z) == real && cimag(z) == imag;
 }
 
 bool assert_double_complex_equal(const double_complex z, double real, double imag){
-    char string1[10], string2[10];
-    
-    sprintf(string1, "%.3f", dcreal(z));
-    sprintf(string2, "%.3f", real);
-
-    if(!strcmp(string1, string2)){
-        sprintf(string1, "%.3f", dcimag(z));
-        sprintf(string2, "%.3f", imag);
-
-        if(!strcmp(string1, string2)){
-            return true;
-        }
-    }
-
-    return false;
+    return assert_double_equal(dcreal(z), real) 
+        && assert_double_equal(dcimag(z), imag);
 }
 
 
@@ -85,7 +60,7 @@ int main(void){
         return 1;
     }
 
-    printf("    Modulus: Assert equal the square root of 3,988 = ~63.151...\n");
+    printf("    Modulus: Assert equal the square root of 3,988 = 63.151...\n");
     
     printf("        %.3f...\n", cabs(z1));
     if(assert_double_equal(cabs(z1), 63.151)){
