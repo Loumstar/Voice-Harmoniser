@@ -1,20 +1,5 @@
 #include "../lightweight_complex.h"
-#include <stdio.h>
-#include <string.h>
-#include <stdbool.h>
-
-bool assert_int_equal(int a, int b){
-    return a == b;
-}
-
-bool assert_double_equal(double a, double b){
-    char string1[10], string2[10];
-    
-    sprintf(string1, "%.3f", a);
-    sprintf(string2, "%.3f", b);
-
-    return !strcmp(string1, string2);
-}
+#include "unittest.h"
 
 bool assert_int_complex_equal(const complex z, int real, int imag){
     return creal(z) == real && cimag(z) == imag;
@@ -24,7 +9,6 @@ bool assert_double_complex_equal(const double_complex z, double real, double ima
     return assert_double_equal(dcreal(z), real) 
         && assert_double_equal(dcimag(z), imag);
 }
-
 
 int main(void){
     complex z1 = {62, 12};

@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <string.h>
 #include "fourier_transform.h"
 #include "signal_methods.h"
 #include "peaks_correlation.h"
@@ -109,9 +110,7 @@ frequency_bin* get_peaks(const complex clip[]){
         }
     }
     while(i < PEAKS_ARR_SIZE){ //initialises unused positions in peaks[] to a a standard form.
-        peaks[i][0] = NAN;
-        peaks[i][1] = -1 * INFINITY;
-        peaks[i][2] = NAN;
+        memcpy(peaks[i], NULL_FREQ_BIN, FREQUENCY_BIN_SIZE);
         i++;
     }
     return peaks;
@@ -126,19 +125,19 @@ frequency_bin* get_pitches(complex clip[]){
     return peaks;
 }
 
-double get_pitch(complex clip[]){
-    frequency_bin* notes = get_pitches(clip);
-    if(notes == NULL) return 0;
-    
-    double f;
+void get_pitch_bin(frequency_bin notes[], frequency_bin pitch_bin){
     double max_p = 0;
 
     for(size_t i = 0; i < PEAKS_ARR_SIZE; i++){
         if(!isnan(notes[i][2]) && notes[i][2] > max_p){
-            f = notes[i][0];
+            memcpy(pitch_bin, notes[i], FREQUENCY_BIN_SIZE);
+            max_p = notes[i][2];
         }
     }
+}
 
-    free(notes);
-    return f;
+double get_pitch(frequency_bin notes[]){
+    frequency_bin bin;
+    get_pitch_bin(notes, bin);
+    return bin[0];
 }
