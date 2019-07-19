@@ -45,7 +45,7 @@ int main(void){
 
     //Output basic properties of the transform.
     printf(
-        "The maximum frequency measured is %i Hz.\nThe frequency resolution is %.1f Hz.\nThe length of the clip is %.3fs.\n", 
+        "The maximum frequency measured is %i Hz.\nThe frequency resolution is %.1f Hz.\nThe length of the clip is %.3fs.\n\n", 
         (int) FRAME_RATE / 2,
         frequency_resolution, 
         (double) CLIP_FRAMES / FRAME_RATE
@@ -83,7 +83,7 @@ int main(void){
 
     if(!pitch) return 1;
 
-    printf("Assert that pitch detected is 125 ± 2 Hz\n");
+    printf("\nAssert that pitch detected is 125 ± 2 Hz\n");
     printf("    %.f\n", pitch);
     if(assert_double_similar(pitch, 125.0, frequency_resolution / 2)){
         printf("    PASS\n\n");
