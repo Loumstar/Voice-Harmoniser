@@ -1,6 +1,7 @@
 #include <SoftwareSerial.h>
 #include <math.h>
 #include <midi.h>
+#include <audio_out.h>
 
 #define AUDIO_IN A0
 #define AUDIO_OUT 3
