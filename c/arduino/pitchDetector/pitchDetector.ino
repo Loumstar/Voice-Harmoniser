@@ -1,6 +1,5 @@
 #include <SoftwareSerial.h>
-
-#include "./c/arduino/pitch_detection_lib_arduino/pitch_detection.h"
+#include <pitch_detection.lite.h>
 
 #define AUDIO_IN A0
 

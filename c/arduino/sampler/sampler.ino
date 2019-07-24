@@ -1,7 +1,6 @@
 #include <SoftwareSerial.h>
 #include <math.h>
-
-#include "./c/arduino/arduino_tools.h"
+#include <midi.h>
 
 #define AUDIO_IN A0
 #define AUDIO_OUT 3
