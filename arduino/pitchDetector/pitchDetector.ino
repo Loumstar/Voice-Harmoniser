@@ -1,5 +1,5 @@
 #include <SoftwareSerial.h>
-#include <pitch_detection.lite.h>
+#include <pitch_detection.h>
 
 #define AUDIO_IN A0
 

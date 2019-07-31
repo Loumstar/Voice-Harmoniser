@@ -42,7 +42,7 @@ void setup(){
         serial_msg, 
         "Initial Setup:\nSampling Rate: %d Hz.\nSample length %d ms.\n%d frames per sample.", 
         SAMPLE_RATE, 
-        LATENCY * 1000, 
+        (int) LATENCY * 1000, 
         SAMPLE_FRAMES
     );
     Serial.println(serial_msg);
