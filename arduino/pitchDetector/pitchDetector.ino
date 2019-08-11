@@ -23,7 +23,7 @@ double f;
 size_t i = 0;
 
 void setup(){
-    DDRL = B00000000; //analog pins A0-A7 are input (directional register F)
+    DDRL = B00000000; //pins L0-L7 are input
     pinMode(MALLOC_ERR_LED, OUTPUT);
 
     samplerArduino.begin(9600);
@@ -34,7 +34,7 @@ void loop(){
     if(i == CLIP_FRAMES){
         f = get_pitch(audio_signal);
         
-        if(f == 0.0) digitalWrite(MALLOC_ERR_LED, HIGH);
+        if(!f) digitalWrite(MALLOC_ERR_LED, HIGH);
         
         samplerArduino.write(f);
         i = 0;
