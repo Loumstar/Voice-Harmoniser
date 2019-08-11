@@ -1,7 +1,14 @@
 #include <SoftwareSerial.h>
 #include <pitch_detection.h>
 
-#define AUDIO_IN A0
+/*
+Input pins of the L register form an 8-bit binary number using L7-L0 (42-35)
+Therefore the audio input can be measured accurately without noise.
+
+The pins have the corresponding values:
+L7   L6   L5   L4   L3   L2   L1   L0
+128  64   32   16   8    4    2    1
+*/
 
 #define MALLOC_ERR_LED 1
 
@@ -16,7 +23,7 @@ double f;
 size_t i = 0;
 
 void setup(){
-    pinMode(AUDIO_IN, INPUT);
+    DDRL = B00000000; //analog pins A0-A7 are input (directional register F)
     pinMode(MALLOC_ERR_LED, OUTPUT);
 
     samplerArduino.begin(9600);
@@ -32,7 +39,8 @@ void loop(){
         samplerArduino.write(f);
         i = 0;
     } else {
-        audio_signal[i][0] = analogRead(AUDIO_IN);
+        audio_signal[i][0] = PINL;
+                          
         delay(pow(FRAME_RATE, -1) * 1000); //delays by the length of a frame in miliseconds
         i++;
     }

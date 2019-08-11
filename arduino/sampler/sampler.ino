@@ -3,14 +3,28 @@
 #include <midi.h>
 #include <audio_out.h>
 
-#define AUDIO_IN A0
+/*
+Input and output pins of the L/A register form an 8-bit binary numbers using L7-L0 (42-35) and A7-A0 (71-78).
+Therefore the audio i/o can be measured accurately without noise.
+
+The input pins have the corresponding values:
+Register id  L7   L6   L5   L4   L3   L2   L1   L0
+Pin number   42   41   40   39   38   37   36   35
+Value        128  64   32   16   8    4    2    1
+
+and output pins:
+Register id  A7   A6   A5   A4   A3   A2   A1   A0
+Pin number   71   72   73   74   75   76   77   78
+Value        128  64   32   16   8    4    2    1
+*/
+
 #define AUDIO_OUT 3
 
-#define MIDI_IN 5
-#define MIDI_OUT 6
+#define MIDI_IN 19
+#define MIDI_OUT 18
 
-#define PITCH_DETECTOR_IN 10
-#define PITCH_DETECTOR_OUT 11
+#define PITCH_DETECTOR_IN 17
+#define PITCH_DETECTOR_OUT 16
 
 SoftwareSerial midiDevice(MIDI_IN, MIDI_OUT);
 SoftwareSerial pitchDetector(PITCH_DETECTOR_IN, PITCH_DETECTOR_OUT);
@@ -56,8 +70,9 @@ void setup(){
     sprintf(serial_msg, "New voice frequency: %d", voice_f);
     Serial.println(serial_msg);
 
-    pinMode(AUDIO_IN, INPUT);
-    pinMode(AUDIO_OUT, OUTPUT);
+    //Set up audio pins
+    DDRL = B00000000; //All L register pins are for input from ADC
+    DDRA = B11111111; //All A register pins are for output to DAC
 }
 
 void loop(){
@@ -80,14 +95,14 @@ void loop(){
 
     frame = 0;
     while(frame < SAMPLE_FRAMES){ // records the sample
-        sample[frame] = analogRead(AUDIO_IN) / 1024;
+        sample[frame] = PINL;
         delay(pow(SAMPLE_RATE, -1) * 1000);
         frame++;
     }
 
     frame = 0;
     while(frame < SAMPLE_FRAMES){ // plays back sample
-        digitalWrite(AUDIO_OUT, playback_amplitude(sample, frame, voice_f, notes) * 255);
+        PORTA = (int) (playback_amplitude(sample, frame, voice_f, notes) * 255) && 255;
         delay(pow(SAMPLE_RATE, -1) * 1000);
         frame++;
     }
