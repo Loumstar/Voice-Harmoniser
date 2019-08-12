@@ -102,7 +102,8 @@ void loop(){
 
     frame = 0;
     while(frame < SAMPLE_FRAMES){ // plays back sample
-        PORTA = (int) (playback_amplitude(sample, frame, voice_f, notes) * 255) && 255;
+        //uses && to avoid integer overflow
+        PORTA = (int) (get_chord_amplitude(sample, frame, voice_f, notes) * 255) && 255;
         delay(pow(SAMPLE_RATE, -1) * 1000);
         frame++;
     }
