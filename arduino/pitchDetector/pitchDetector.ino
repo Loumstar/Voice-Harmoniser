@@ -10,8 +10,6 @@ L7   L6   L5   L4   L3   L2   L1   L0
 128  64   32   16   8    4    2    1
 */
 
-#define MALLOC_ERR_LED 1
-
 #define FREQ_IN 10
 #define FREQ_OUT 11
 
@@ -19,33 +17,25 @@ SoftwareSerial samplerArduino(FREQ_IN, FREQ_OUT);
 
 complex audio[CLIP_FRAMES];
 complex audio_copy[CLIP_FRAMES];
+
 frequency_bin notes[PEAKS_ARR_SIZE];
 double harmonics[HARMONICS_ARR_SIZE];
 
-double f;
-
-size_t i = 0;
+double voice_f;
 
 void setup(){
-    DDRL = B00000000; //pins L0-L7 are input
-    pinMode(MALLOC_ERR_LED, OUTPUT);
+    DDRL = B00000000; // Pins L0-L7 are input
 
     samplerArduino.begin(9600);
     while(!samplerArduino);
 }
 
 void loop(){
-    if(i == CLIP_FRAMES){
-        f = get_pitch(audio, audio_copy, notes, harmonics);
-        
-        if(!f) digitalWrite(MALLOC_ERR_LED, HIGH);
-        
-        samplerArduino.write(f);
-        i = 0;
-    } else {
-        audio[i][0] = PINL;
-                          
-        delay(pow(FRAME_RATE, -1) * 1000); //delays by the length of a frame in miliseconds
-        i++;
+    for(size_t i = 0; i < CLIP_FRAMES; i++){
+        audio[i][0] = PINL;              
+        delay(pow(FRAME_RATE, -1) * 1000); // Delays by the length of a frame in miliseconds
     }
+
+    voice_f = get_pitch(audio, audio_copy, notes, harmonics);    
+    samplerArduino.write(voice_f);
 }

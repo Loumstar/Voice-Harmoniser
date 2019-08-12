@@ -18,8 +18,6 @@ Pin number   71   72   73   74   75   76   77   78
 Value        128  64   32   16   8    4    2    1
 */
 
-#define AUDIO_OUT 3
-
 #define MIDI_IN 19
 #define MIDI_OUT 18
 
@@ -31,48 +29,50 @@ SoftwareSerial pitchDetector(PITCH_DETECTOR_IN, PITCH_DETECTOR_OUT);
 
 note notes[MAX_VOICES];
 
-int midi_msg[3]; // max length of midi message is 3.
-char serial_msg[100];
-double sample[SAMPLE_FRAMES];
+int sample[SAMPLE_FRAMES];
+int amplitude;
+
+int midi_msg[3];
+char arduino_status_msg[100];
 
 double voice_f;
-
-size_t frame = 0;
 
 void setup(){
     Serial.begin(9600); // USB baud rate
     while(!Serial); // While USB connection has not been established
-    Serial.write("USB connection established");
+    Serial.print("USB connection established\n");
     
     midiDevice.begin(31250); // MIDI baud rate
     while(!midiDevice);
-    Serial.println("MIDI Device connection established");
+    Serial.print("MIDI Device connection established\n");
 
     pitchDetector.begin(9600); // Arduino baud rate
     while(!pitchDetector);
-    Serial.println("Pitch Detector Arduino connection established");
+    Serial.print("Pitch Detector Arduino connection established\n");
 
     sprintf(
-        serial_msg, 
-        "Initial Setup:\nSampling Rate: %d Hz.\nSample length %d ms.\n%d frames per sample.", 
+        arduino_status_msg, 
+        "Initial Setup:\nSampling Rate: %d Hz.\nSample length %d ms.\n%d frames per sample.\n", 
         SAMPLE_RATE, 
         (int) LATENCY * 1000, 
         SAMPLE_FRAMES
     );
-    Serial.println(serial_msg);
+
+    Serial.print(arduino_status_msg);
 
     // Do not start processing signal until voice frequency determined
     while(!pitchDetector.available()){ 
         pitchDetector.listen();
     }
+
     voice_f = pitchDetector.parseFloat();
     
-    sprintf(serial_msg, "New voice frequency: %d", voice_f);
-    Serial.println(serial_msg);
+    sprintf(arduino_status_msg, "New voice frequency: %d\n", voice_f);
+    Serial.print(arduino_status_msg);
 
-    //Set up audio pins
-    DDRL = B00000000; //All L register pins are for input from ADC
-    DDRA = B11111111; //All A register pins are for output to DAC
+    // Set up audio pins
+    DDRL = B00000000; // All L register pins are for input from ADC
+    DDRA = B11111111; // All A register pins are for output to DAC
 }
 
 void loop(){
@@ -81,30 +81,26 @@ void loop(){
         read_midi(midi_msg, midiDevice);
         handle_midi(midi_msg, notes);
         
-        sprintf(serial_msg, "Midi update: %x %x %x.", midi_msg[0], midi_msg[1], midi_msg[2]);
-        Serial.println(serial_msg);
+        sprintf(arduino_status_msg, "Midi update: %x %x %x\n", midi_msg[0], midi_msg[1], midi_msg[2]);
+        Serial.print(arduino_status_msg);
     }
 
     pitchDetector.listen();
+    
     if(pitchDetector.available()){
         voice_f = pitchDetector.parseFloat();
 
-        sprintf(serial_msg, "New voice frequency: %f", voice_f);
-        Serial.println(serial_msg);
+        sprintf(arduino_status_msg, "New voice frequency: %f\n", voice_f);
+        Serial.print(arduino_status_msg);
     }
 
-    frame = 0;
-    while(frame < SAMPLE_FRAMES){ // records the sample
+    for(size_t frame = 0; frame < SAMPLE_FRAMES; frame++){ // Record the sample frame by frame
         sample[frame] = PINL;
         delay(pow(SAMPLE_RATE, -1) * 1000);
-        frame++;
     }
 
-    frame = 0;
-    while(frame < SAMPLE_FRAMES){ // plays back sample
-        //uses && to avoid integer overflow
-        PORTA = (int) (get_chord_amplitude(sample, frame, voice_f, notes) * 255) && 255;
+    for(size_t frame = 0; frame < SAMPLE_FRAMES; frame++){ // Play back sample frame by frame
+        PORTA = voice_f ? get_chord_amplitude(sample, notes, voice_f, frame, SAMPLE_FRAMES) : sample[frame];
         delay(pow(SAMPLE_RATE, -1) * 1000);
-        frame++;
     }
 }
