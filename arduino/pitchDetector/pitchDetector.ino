@@ -1,5 +1,5 @@
 #include <SoftwareSerial.h>
-#include <pitch_detection.h>
+#include <pitch_detection.no_malloc.h>
 
 /*
 Input pins of the L register form an 8-bit binary number using L7-L0 (42-35)
@@ -18,6 +18,10 @@ L7   L6   L5   L4   L3   L2   L1   L0
 SoftwareSerial samplerArduino(FREQ_IN, FREQ_OUT);
 
 complex audio_signal[CLIP_FRAMES];
+complex copy_signal[CLIP_FRAMES];
+frequency_bin notes[PEAKS_ARR_SIZE];
+double harmonics[HARMONICS_ARR_SIZE];
+
 double f;
 
 size_t i = 0;
@@ -32,7 +36,7 @@ void setup(){
 
 void loop(){
     if(i == CLIP_FRAMES){
-        f = get_pitch(audio_signal);
+        f = get_pitch(audio_signal, copy_signal, notes, harmonics);
         
         if(!f) digitalWrite(MALLOC_ERR_LED, HIGH);
         
