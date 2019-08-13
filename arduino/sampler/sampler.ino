@@ -79,13 +79,8 @@ void setup(){
 void loop(){
     midiDevice.listen();
     if(midiDevice.available()){
-        read_midi(midi_msg, midiDevice);
-
-        sprintf(arduino_status_msg, "Midi update: %x %x %x\n", midi_msg[0], midi_msg[1], midi_msg[2]);
-        Serial.print(arduino_status_msg);
-
-        handle_midi(midi_msg, notes);
-        
+        get_midi_msg(midi_msg, midiDevice);
+        handle_midi_msg(midi_msg, notes);
         report_midi_change(midi_msg, arduino_status_msg);
         Serial.print(arduino_status_msg);
     }
@@ -106,7 +101,7 @@ void loop(){
 
     for(size_t frame = 0; frame < SAMPLE_FRAMES; frame++){ // Play back sample frame by frame
         // If voice_f is zero, then the audio input from PINL is fed directly to PORTA
-        PORTA = voice_f ? get_chord_amplitude(sample, notes, voice_f, frame, SAMPLE_FRAMES) : PINL;
+        PORTA = voice_f ? combined_notes_amplitude_8bit(sample, notes, voice_f, frame, SAMPLE_FRAMES) : PINL;
         delay(pow(SAMPLE_RATE, -1) * 1000);
     }
 }
