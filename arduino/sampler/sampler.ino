@@ -86,7 +86,7 @@ void loop(){
     }
 
     pitchDetector.listen();
-    
+
     if(pitchDetector.available()){
         voice_f = pitchDetector.parseFloat();
 
@@ -100,7 +100,8 @@ void loop(){
     }
 
     for(size_t frame = 0; frame < SAMPLE_FRAMES; frame++){ // Play back sample frame by frame
-        PORTA = voice_f ? get_chord_amplitude(sample, notes, voice_f, frame, SAMPLE_FRAMES) : sample[frame];
+        // If voice_f is zero, then the audio input from PINL is fed directly to PORTA
+        PORTA = voice_f ? get_chord_amplitude(sample, notes, voice_f, frame, SAMPLE_FRAMES) : PINL;
         delay(pow(SAMPLE_RATE, -1) * 1000);
     }
 }
