@@ -1,5 +1,6 @@
 #include <SoftwareSerial.h>
 #include <math.h>
+#include <stdio.h>
 #include <midi.h>
 #include <audio_out.h>
 
@@ -79,9 +80,13 @@ void loop(){
     midiDevice.listen();
     if(midiDevice.available()){
         read_midi(midi_msg, midiDevice);
+
+        sprintf(arduino_status_msg, "Midi update: %x %x %x\n", midi_msg[0], midi_msg[1], midi_msg[2]);
+        Serial.print(arduino_status_msg);
+
         handle_midi(midi_msg, notes);
         
-        sprintf(arduino_status_msg, "Midi update: %x %x %x\n", midi_msg[0], midi_msg[1], midi_msg[2]);
+        report_midi_change(midi_msg, arduino_status_msg);
         Serial.print(arduino_status_msg);
     }
 
