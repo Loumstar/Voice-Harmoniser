@@ -30,8 +30,8 @@ SoftwareSerial pitchDetector(PITCH_DETECTOR_IN, PITCH_DETECTOR_OUT);
 
 note notes[MAX_VOICES];
 
-int sample[SAMPLE_FRAMES];
-int amplitude;
+uint8_t sample[SAMPLE_FRAMES];
+uint8_t amplitude;
 
 int midi_msg[3];
 char arduino_status_msg[100];
