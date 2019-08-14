@@ -1,22 +1,13 @@
 #include <SoftwareSerial.h>
 #include <pitch_detection.no_malloc.h>
 
-/*
-Input pins of the L register form an 8-bit binary number using L7-L0 (42-35)
-Therefore the audio input can be measured accurately without noise.
-
-The pins have the corresponding values:
-L7   L6   L5   L4   L3   L2   L1   L0
-128  64   32   16   8    4    2    1
-*/
-
 #define AUDIO_IN A0
 #define NOT_AUDIO_IN A1
 
-#define FREQ_IN 10
-#define FREQ_OUT 11
+#define SAMPLER_IN 10
+#define SAMPLER_OUT 11
 
-SoftwareSerial samplerArduino(FREQ_IN, FREQ_OUT);
+SoftwareSerial samplerArduino(SAMPLER_IN, SAMPLER_OUT);
 
 complex audio[SAMPLE_FRAMES];
 complex audio_copy[SAMPLE_FRAMES];
