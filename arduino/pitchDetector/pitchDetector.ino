@@ -18,10 +18,10 @@ L7   L6   L5   L4   L3   L2   L1   L0
 
 SoftwareSerial samplerArduino(FREQ_IN, FREQ_OUT);
 
-complex audio[CLIP_FRAMES];
-complex audio_copy[CLIP_FRAMES];
+complex audio[SAMPLE_FRAMES];
+complex audio_copy[SAMPLE_FRAMES];
 
-frequency_bin notes[PEAKS_ARR_SIZE];
+frequency_bin notes[NOTES_ARR_SIZE];
 double harmonics[HARMONICS_ARR_SIZE];
 
 double voice_f;
@@ -32,7 +32,7 @@ void setup(){
 }
 
 void loop(){
-    for(size_t i = 0; i < CLIP_FRAMES; i++){
+    for(size_t i = 0; i < SAMPLE_FRAMES; i++){
         audio[i][0] = analogRead(AUDIO_IN) / 4; // Work out how to use NOT_AUDIO_IN             
         delay(pow(FRAME_RATE, -1) * 1000); // Delays by the length of a frame in miliseconds
     }
