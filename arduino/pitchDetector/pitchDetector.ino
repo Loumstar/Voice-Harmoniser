@@ -10,6 +10,9 @@ L7   L6   L5   L4   L3   L2   L1   L0
 128  64   32   16   8    4    2    1
 */
 
+#define AUDIO_IN A0
+#define NOT_AUDIO_IN A1
+
 #define FREQ_IN 10
 #define FREQ_OUT 11
 
@@ -24,15 +27,13 @@ double harmonics[HARMONICS_ARR_SIZE];
 double voice_f;
 
 void setup(){
-    DDRL = B00000000; // Pins L0-L7 are input
-
     samplerArduino.begin(9600);
     while(!samplerArduino);
 }
 
 void loop(){
     for(size_t i = 0; i < CLIP_FRAMES; i++){
-        audio[i][0] = PINL;              
+        audio[i][0] = analogRead(AUDIO_IN) / 4; // Work out how to use NOT_AUDIO_IN             
         delay(pow(FRAME_RATE, -1) * 1000); // Delays by the length of a frame in miliseconds
     }
 

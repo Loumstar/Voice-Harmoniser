@@ -4,20 +4,11 @@
 #include <midi.h>
 #include <audio_out.h>
 
-/*
-Input and output pins of the L/A register form an 8-bit binary numbers using L7-L0 (42-35) and A7-A0 (71-78).
-Therefore the audio i/o can be measured accurately without noise.
+#define AUDIO_IN A0
+#define NOT_AUDIO_IN A1
 
-The input pins have the corresponding values:
-Register id  L7   L6   L5   L4   L3   L2   L1   L0
-Pin number   42   41   40   39   38   37   36   35
-Value        128  64   32   16   8    4    2    1
-
-and output pins:
-Register id  A7   A6   A5   A4   A3   A2   A1   A0
-Pin number   71   72   73   74   75   76   77   78
-Value        128  64   32   16   8    4    2    1
-*/
+#define AUDIO_OUT 15
+#define NOT_AUDIO_OUT 16
 
 #define MIDI_IN 19
 #define MIDI_OUT 18
@@ -30,8 +21,8 @@ SoftwareSerial pitchDetector(PITCH_DETECTOR_IN, PITCH_DETECTOR_OUT);
 
 note notes[MAX_VOICES];
 
-int sample[SAMPLE_FRAMES];
-int amplitude;
+uint8_t sample[SAMPLE_FRAMES];
+uint8_t amplitude;
 
 int midi_msg[3];
 char arduino_status_msg[100];
@@ -71,9 +62,9 @@ void setup(){
     sprintf(arduino_status_msg, "New voice frequency: %d\n", voice_f);
     Serial.print(arduino_status_msg);
 
-    // Set up audio pins
-    DDRL = B00000000; // All L register pins are for input from ADC
-    DDRA = B11111111; // All A register pins are for output to DAC
+    // Set up audio output pins
+    pinMode(AUDIO_OUT, OUTPUT);
+    pinMode(NOT_AUDIO_OUT, OUTPUT);
 }
 
 void loop(){
@@ -95,13 +86,17 @@ void loop(){
     }
 
     for(size_t frame = 0; frame < SAMPLE_FRAMES; frame++){ // Record the sample frame by frame
-        sample[frame] = PINL;
+        sample[frame] = analogRead(AUDIO_IN) / 4; // Work out how to use NOT_AUDIO_OUT to reduce noise
         delay(pow(SAMPLE_RATE, -1) * 1000);
     }
 
     for(size_t frame = 0; frame < SAMPLE_FRAMES; frame++){ // Play back sample frame by frame
         // If voice_f is zero, then the audio input from PINL is fed directly to PORTA
-        PORTA = voice_f ? combined_notes_amplitude_8bit(sample, notes, voice_f, frame, SAMPLE_FRAMES) : PINL;
+        amplitude = voice_f ? combined_notes_amplitude_8bit(sample, notes, voice_f, frame, SAMPLE_FRAMES) : sample[frame];
+        
+        analogWrite(AUDIO_OUT, amplitude);
+        analogWrite(NOT_AUDIO_OUT, ~amplitude);
+
         delay(pow(SAMPLE_RATE, -1) * 1000);
     }
 }
