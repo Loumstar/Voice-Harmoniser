@@ -22,7 +22,7 @@ Value        128  64   32   16   8    4    2    1
 #define SAMPLE_LENGTH pow(10, -3) // 1 milisecond samples
 #define SAMPLE_RATE 44100 // standard 44.1kHz sample rate
 
-#define SAMPLE_FRAMES (size_t) round(SAMPLE_RATE * SAMPLE_LENGTH)
+#define SAMPLE_ARR_SIZE (size_t) round(SAMPLE_RATE * SAMPLE_LENGTH)
 
 #define MIDI_IN 19
 #define MIDI_OUT 18
