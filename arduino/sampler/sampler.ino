@@ -96,7 +96,7 @@ void loop(){
     }
 
     for(size_t frame = 0; frame < SAMPLE_ARR_SIZE; frame++){ // Play back sample frame by frame
-        // If voice_f is zero, then the audio input from PINL is fed directly to PORTA
+        // If voice_f is zero, then return the original frame
         amplitude = voice_f ? combined_notes_amplitude_8bit(sample, notes, voice_f, frame, SAMPLE_ARR_SIZE) : sample[frame];
         
         analogWrite(AUDIO_OUT, amplitude);
