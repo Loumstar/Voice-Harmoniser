@@ -4,6 +4,11 @@
 #include <midi.h>
 #include <audio_out.h>
 
+#define SAMPLE_LENGTH pow(10, -3) // 1 milisecond samples
+#define SAMPLE_RATE 44100 // standard 44.1kHz sample rate
+
+#define SAMPLE_ARR_SIZE (size_t) round(SAMPLE_RATE * SAMPLE_LENGTH)
+
 #define AUDIO_IN A0
 #define NOT_AUDIO_IN A1
 
@@ -21,7 +26,7 @@ SoftwareSerial pitchDetector(PITCH_DETECTOR_IN, PITCH_DETECTOR_OUT);
 
 note notes[MAX_VOICES];
 
-uint8_t sample[SAMPLE_FRAMES];
+uint8_t sample[SAMPLE_ARR_SIZE];
 uint8_t amplitude;
 
 int midi_msg[3];
@@ -46,8 +51,8 @@ void setup(){
         arduino_status_msg, 
         "Initial Setup:\nSampling Rate: %d Hz.\nSample length %d ms.\n%d frames per sample.\n", 
         SAMPLE_RATE, 
-        (int) LATENCY * 1000, 
-        SAMPLE_FRAMES
+        (int) SAMPLE_LENGTH * 1000, 
+        SAMPLE_ARR_SIZE
     );
 
     Serial.print(arduino_status_msg);
@@ -85,14 +90,14 @@ void loop(){
         Serial.print(arduino_status_msg);
     }
 
-    for(size_t frame = 0; frame < SAMPLE_FRAMES; frame++){ // Record the sample frame by frame
-        sample[frame] = analogRead(AUDIO_IN) / 4; // Work out how to use NOT_AUDIO_OUT to reduce noise
+    for(size_t frame = 0; frame < SAMPLE_ARR_SIZE; frame++){ // Record the sample frame by frame
+        sample[frame] = analogRead(AUDIO_IN) / 4; // Work out how to use NOT_AUDIO_IN to reduce noise
         delay(pow(SAMPLE_RATE, -1) * 1000);
     }
 
-    for(size_t frame = 0; frame < SAMPLE_FRAMES; frame++){ // Play back sample frame by frame
+    for(size_t frame = 0; frame < SAMPLE_ARR_SIZE; frame++){ // Play back sample frame by frame
         // If voice_f is zero, then the audio input from PINL is fed directly to PORTA
-        amplitude = voice_f ? combined_notes_amplitude_8bit(sample, notes, voice_f, frame, SAMPLE_FRAMES) : sample[frame];
+        amplitude = voice_f ? combined_notes_amplitude_8bit(sample, notes, voice_f, frame, SAMPLE_ARR_SIZE) : sample[frame];
         
         analogWrite(AUDIO_OUT, amplitude);
         analogWrite(NOT_AUDIO_OUT, ~amplitude);

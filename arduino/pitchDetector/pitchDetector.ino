@@ -9,11 +9,11 @@
 
 SoftwareSerial samplerArduino(SAMPLER_IN, SAMPLER_OUT);
 
-complex audio[SAMPLE_FRAMES];
-complex audio_copy[SAMPLE_FRAMES];
+complex audio[PD_SAMPLE_ARR_SIZE];
+complex audio_copy[PD_SAMPLE_ARR_SIZE];
 
-frequency_bin notes[NOTES_ARR_SIZE];
-double harmonics[HARMONICS_ARR_SIZE];
+frequency_bin notes[PD_NOTES_ARR_SIZE];
+double harmonics[PD_HARMONICS_ARR_SIZE];
 
 double voice_f;
 
@@ -23,9 +23,9 @@ void setup(){
 }
 
 void loop(){
-    for(size_t i = 0; i < SAMPLE_FRAMES; i++){
+    for(size_t i = 0; i < PD_SAMPLE_ARR_SIZE; i++){
         audio[i][0] = analogRead(AUDIO_IN) / 4; // Work out how to use NOT_AUDIO_IN             
-        delay(pow(FRAME_RATE, -1) * 1000); // Delays by the length of a frame in miliseconds
+        delay(pow(PD_SAMPLE_RATE, -1) * 1000); // Delays by the length of a frame in miliseconds
     }
 
     voice_f = get_pitch(audio, audio_copy, notes, harmonics);    
