@@ -19,6 +19,11 @@ Pin number   71   72   73   74   75   76   77   78
 Value        128  64   32   16   8    4    2    1
 */
 
+#define SAMPLE_LENGTH pow(10, -3) // 1 milisecond samples
+#define SAMPLE_RATE 44100 // standard 44.1kHz sample rate
+
+#define SAMPLE_FRAMES (size_t) round(SAMPLE_RATE * SAMPLE_LENGTH)
+
 #define MIDI_IN 19
 #define MIDI_OUT 18
 
@@ -55,7 +60,7 @@ void setup(){
         arduino_status_msg, 
         "Initial Setup:\nSampling Rate: %d Hz.\nSample length %d ms.\n%d frames per sample.\n", 
         SAMPLE_RATE, 
-        (int) LATENCY * 1000, 
+        (int) SAMPLE_LENGTH * 1000, 
         SAMPLE_FRAMES
     );
 
