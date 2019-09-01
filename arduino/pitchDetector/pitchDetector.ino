@@ -1,39 +1,34 @@
 #include <SoftwareSerial.h>
-#include <pitch_detection.h>
+
+#include "int_complex.h"
+#include "pitch_detection.h"
+#include "frequency_bin_typedef.h"
 
 #define AUDIO_IN A0
 
-#define MALLOC_ERR_LED 1
+#define SAMPLER_IN 10
+#define SAMPLER_OUT 11
 
-#define FREQ_IN 10
-#define FREQ_OUT 11
+SoftwareSerial samplerArduino(SAMPLER_IN, SAMPLER_OUT);
 
-SoftwareSerial samplerArduino(FREQ_IN, FREQ_OUT);
+int_complex audio[PD_SAMPLE_ARR_SIZE];
+int_complex audio_copy[PD_SAMPLE_ARR_SIZE];
 
-complex audio_signal[CLIP_FRAMES];
-double f;
+frequency_bin notes[PD_NOTES_ARR_SIZE];
+double harmonics[PD_HARMONICS_ARR_SIZE];
 
-size_t i = 0;
+double voice_f;
 
 void setup(){
-    pinMode(AUDIO_IN, INPUT);
-    pinMode(MALLOC_ERR_LED, OUTPUT);
-
     samplerArduino.begin(9600);
     while(!samplerArduino);
 }
 
 void loop(){
-    if(i == CLIP_FRAMES){
-        f = get_pitch(audio_signal);
-        
-        if(f == 0.0) digitalWrite(MALLOC_ERR_LED, HIGH);
-        
-        samplerArduino.write(f);
-        i = 0;
-    } else {
-        audio_signal[i][0] = analogRead(AUDIO_IN);
-        delay(pow(FRAME_RATE, -1) * 1000); //delays by the length of a frame in miliseconds
-        i++;
+    for(size_t i = 0; i < PD_SAMPLE_ARR_SIZE; i++){
+        audio[i][0] = analogRead(AUDIO_IN) / 4;          
+        delay(pow(PD_SAMPLE_RATE, -1) * 1000); // Delays by the length of a frame in miliseconds
     }
+    voice_f = get_pitch(audio, audio_copy, notes, harmonics);    
+    samplerArduino.write(voice_f);
 }
