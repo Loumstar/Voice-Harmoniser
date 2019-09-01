@@ -1,8 +1,9 @@
 #include <SoftwareSerial.h>
 #include <math.h>
 #include <stdio.h>
-#include <midi.h>
-#include <audio_out.h>
+
+#include "midi.h"
+#include "audio_out.h"
 
 #define SAMPLE_LENGTH pow(10, -3) // 1 milisecond samples
 #define SAMPLE_RATE 44100 // standard 44.1kHz sample rate
@@ -10,10 +11,6 @@
 #define SAMPLE_ARR_SIZE (size_t) round(SAMPLE_RATE * SAMPLE_LENGTH)
 
 #define AUDIO_IN A0
-#define NOT_AUDIO_IN A1
-
-#define AUDIO_OUT 15
-#define NOT_AUDIO_OUT 16
 
 #define MIDI_IN 19
 #define MIDI_OUT 18
@@ -68,8 +65,7 @@ void setup(){
     Serial.print(arduino_status_msg);
 
     // Set up audio output pins
-    pinMode(AUDIO_OUT, OUTPUT);
-    pinMode(NOT_AUDIO_OUT, OUTPUT);
+    DDRA = B11111111;
 }
 
 void loop(){
@@ -97,11 +93,7 @@ void loop(){
 
     for(size_t frame = 0; frame < SAMPLE_ARR_SIZE; frame++){ // Play back sample frame by frame
         // If voice_f is zero, then return the original frame
-        amplitude = voice_f ? combined_notes_amplitude_8bit(sample, notes, voice_f, frame, SAMPLE_ARR_SIZE) : sample[frame];
-        
-        analogWrite(AUDIO_OUT, amplitude);
-        analogWrite(NOT_AUDIO_OUT, ~amplitude);
-
+        PORTA = voice_f ? combined_notes_amplitude_8bit(sample, notes, voice_f, frame, SAMPLE_ARR_SIZE) : sample[frame];
         delay(pow(SAMPLE_RATE, -1) * 1000);
     }
 }
