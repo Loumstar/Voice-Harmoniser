@@ -5,6 +5,16 @@
 #include "midi.h"
 #include "audio_out.h"
 
+/*
+Output pins of the A register form an 8-bit binary number using A7-A0 (71-78).
+From this, a resistor ladder is attached to make an analog signal.
+
+The output pins have the corresponding values:
+Register id  A7   A6   A5   A4   A3   A2   A1   A0
+Pin number   71   72   73   74   75   76   77   78
+Value        128  64   32   16   8    4    2    1
+*/
+
 #define SAMPLE_LENGTH pow(10, -3) // 1 milisecond samples
 #define SAMPLE_RATE 44100 // standard 44.1kHz sample rate
 
@@ -30,6 +40,16 @@ int midi_msg[3];
 char arduino_status_msg[100];
 
 double voice_f;
+
+void get_midi_msg(int msg[3], Stream &midiDevice){
+    size_t msg_length = midiDevice.available();
+    size_t i = 0;
+
+    while(i < msg_length){
+        msg[i] = midiDevice.read(); //need to check for status byte
+        i++;
+    }
+}
 
 void setup(){
     Serial.begin(9600); // USB baud rate
