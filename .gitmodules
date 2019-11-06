@@ -1,0 +1,9 @@
+[submodule "c/Arduino-Libraries"]
+	path = c/Arduino-Libraries
+	url = git@github.com:Loumstar/Arduino-Libraries.git
+[submodule "c/Write-WAV-File"]
+	path = c/Write-WAV-File
+	url = git@github.com:Loumstar/Write-WAV-File.git
+[submodule "c/Pitch-Detection"]
+	path = c/Pitch-Detection
+	url = git@github.com:Loumstar/Pitch-Detection.git
