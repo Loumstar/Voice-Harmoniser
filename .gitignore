@@ -1,4 +1,4 @@
-# Ignore all files
+# Ignore all files (this is so to include executables which have no extensions)
 *
 
 # Except directories and files with extensions
@@ -22,3 +22,8 @@
 
 # And ignore pycache
 __pycache__
+
+# Don't ignore submodules
+!c/Arduino-Libraries
+!c/Pitch-Detection
+!c/Write-WAV-File

@@ -24,9 +24,7 @@ SUBMODULE_OBJECT_FILES = $(PITCH_DETECTION_OBJECT_FILES) $(WAV_OBJECT_FILES) $(R
 
 INCLUDES = \
 	-I./Arduino-Libraries/reharmoniser/ \
-	-I./Arduino-Libraries/midi/ \
 	-I./Write-WAV-File/ \
-	-I./Write-WAV-File/scripts/ \
 	-I./Pitch-Detection/
 
 # Executable
