@@ -17,9 +17,6 @@
 *.o
 *.wav
 
-# Except elements_vocals_sample.wav
-!c/elements_vocals_sample.wav
-
 # And ignore pycache
 __pycache__
 

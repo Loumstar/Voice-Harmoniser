@@ -2,14 +2,15 @@
 #include <complex.h>
 #include <math.h>
 
-#include "pitch_detection.h"
-#include "reharmoniser.h"
-#include "wave_file.h"
+#include "Pitch-Detection/pitch_detection.h"
+#include "Arduino-Libraries/reharmoniser/reharmoniser.h"
+#include "Write-WAV-File/wave_file.h"
 
 int main(void){
     char sample_filename[] = "Testing C-note.wav";
     char reharmonised_filename[] = "note_reharmonised_to_chord.wav";
 
+    // The notes to reharmonise the sample to. To be replaced with MIDI.
     note notes[MAX_VOICES] = {
         {40, 261.6, 128},
         {44, 329.6, 128},
@@ -29,10 +30,12 @@ int main(void){
     // Read wave file to sample
     Wave sample = read_wave(sample_filename);
 
+    // Determine size of each buffer. This must be a power of two so sample_buffer_time is rounded to this value.
     sample_buffer_size = (size_t) pow(2, round(log2f(sample.header.sample_rate * sample_buffer_time)));
-
     printf("Sample Buffer Length: %.2f ms\n", ((float) sample_buffer_size / sample.header.sample_rate) * 1000);
 
+    // Determine size of the sample. This must also be a power of two but two avoid cutting part of the sample 
+    // the upper power of two is selected. The extra frames are initialised to zero.
     size_t sample_size = pow(2, ceil(log2f(sample.numberof_samples)));
 
     // Allocate memory for the sample array
@@ -45,21 +48,29 @@ int main(void){
     // Allocate memory for the circular buffer with complex type (for pitch detection)
     complex_buffer = malloc(sample_buffer_size * sizeof(double complex));
 
+    // For each buffer
     for(size_t i = 0; i < sample_size; i += sample_buffer_size){
+        
+        // Read wave data into buffer
         for(size_t j = 0; j < sample_buffer_size && (i + j) < sample_size; j++){
             buffer[j] = sample_array[i + j];
             complex_buffer[j] = (double) sample_array[i + j];
         }
 
+        // Determine pitch of the sample
         pitch = get_pitch(complex_buffer, sample_buffer_size, sample.header.sample_rate, sample.header.bits_per_sample);            
 
+        // Write the reharmonised version back into the sample array
         for(size_t j = 0; j < sample_buffer_size && (i + j) < sample_size; j++){
             sample_array[i + j] = get_reharmonised_wave_amplitude(buffer, notes, pitch, j, sample_buffer_size);
         }
+        
     }
 
+    // Create a wave file using the reharmonised data in sample_array
     write_array_to_wav_file(reharmonised_filename, sample_array, sample_size, 1, sample.header.sample_rate, sample.header.bits_per_sample);
     
+    // Free
     free(complex_buffer);
     free(sample_array);
     free(buffer);

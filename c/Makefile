@@ -22,18 +22,13 @@ OBJECT_FILES = vocal_harmoniser.test.o
 
 SUBMODULE_OBJECT_FILES = $(PITCH_DETECTION_OBJECT_FILES) $(WAV_OBJECT_FILES) $(REHARMONISER_OBJECT_FILE)
 
-INCLUDES = \
-	-I./Arduino-Libraries/reharmoniser/ \
-	-I./Write-WAV-File/ \
-	-I./Pitch-Detection/
-
 # Executable
 testVocalHarmoniser: vocal_harmoniser.test.o 
 	$(CC) -o testVocalHarmoniser vocal_harmoniser.test.o $(SUBMODULE_OBJECT_FILES)
 
 # Object Files
 vocal_harmoniser.test.o: vocal_harmoniser.test.c
-	$(CC) $(CFLAGS) $(INCLUDES) -o vocal_harmoniser.test.o -c vocal_harmoniser.test.c
+	$(CC) $(CFLAGS) -o vocal_harmoniser.test.o -c vocal_harmoniser.test.c
 
 .PHONY: clean, all, submodules
 
