@@ -33,7 +33,7 @@ int main(void){
     double pitch;
 
     // Read wave file to sample
-    Wave sample = read_wave(sample_filename);
+    Wave sample = read_wave_metadata(sample_filename);
 
     /*
     Determine size of each buffer.
